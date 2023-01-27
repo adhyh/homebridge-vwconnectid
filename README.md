@@ -1,169 +1,94 @@
+# Homebridge Volkswagen ID.x plugin
 
-<p align="center">
+This is a plugin for Homebridge to allow controlling your Volkswagen ID series (ID.3, ID.4, ID.5) car through iOS' HomeKit.
 
-<img src="https://github.com/homebridge/branding/raw/master/logos/homebridge-wordmark-logo-vertical.png" width="150">
+Uses the [`npm-vwconnectidapi`](https://github.com/adhyh/npm-vwconnectidapi) module under the hood to communicate with the Volkwagen backend.
 
-</p>
-
-
-# Homebridge Platform Plugin Template
-
-This is a template Homebridge platform plugin and can be used as a base to help you get started developing your own plugin.
-
-This template should be used in conjunction with the [developer documentation](https://developers.homebridge.io/). A full list of all supported service types, and their characteristics is available on this site.
-
-## Clone As Template
-
-Click the link below to create a new GitHub Repository using this template, or click the *Use This Template* button above.
-
-<span align="center">
-
-### [Create New Repository From Template](https://github.com/homebridge/homebridge-plugin-template/generate)
-
-</span>
-
-## Setup Development Environment
-
-To develop Homebridge plugins you must have Node.js 12 or later installed, and a modern code editor such as [VS Code](https://code.visualstudio.com/). This plugin template uses [TypeScript](https://www.typescriptlang.org/) to make development easier and comes with pre-configured settings for [VS Code](https://code.visualstudio.com/) and ESLint. If you are using VS Code install these extensions:
-
-* [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-
-## Install Development Dependencies
-
-Using a terminal, navigate to the project folder and run this command to install the development dependencies:
+## Installation
 
 ```
-npm install
+$ npm i homebridge-weconnectid -g
 ```
 
-## Update package.json
+Homebridge plugins need to be installed globally, so the `-g` is mandatory.
 
-Open the [`package.json`](./package.json) and change the following attributes:
+## Speed
 
-* `name` - this should be prefixed with `homebridge-` or `@username/homebridge-` and contain no spaces or special characters apart from a dashes
-* `displayName` - this is the "nice" name displayed in the Homebridge UI
-* `repository.url` - Link to your GitHub repo
-* `bugs.url` - Link to your GitHub repo issues page
+Communication between you and the backend and between the backend and the car is slow. Any changes take up to a minute or so to propagate to the car.
 
-When you are ready to publish the plugin you should set `private` to false, or remove the attribute entirely.
+## Configuration
 
-## Update Plugin Defaults
+First, you need a working Homebridge installation.
 
-Open the [`src/settings.ts`](./src/settings.ts) file and change the default values:
-
-* `PLATFORM_NAME` - Set this to be the name of your platform. This is the name of the platform that users will use to register the plugin in the Homebridge `config.json`.
-* `PLUGIN_NAME` - Set this to be the same name you set in the [`package.json`](./package.json) file. 
-
-Open the [`config.schema.json`](./config.schema.json) file and change the following attribute:
-
-* `pluginAlias` - set this to match the `PLATFORM_NAME` you defined in the previous step.
-
-## Build Plugin
-
-TypeScript needs to be compiled into JavaScript before it can run. The following command will compile the contents of your [`src`](./src) directory and put the resulting code into the `dist` folder.
+Once you have that working, edit `~/.homebridge/config.json` and add a new accessory:
 
 ```
-npm run build
-```
-
-## Link To Homebridge
-
-Run this command so your global install of Homebridge can discover the plugin in your development environment:
-
-```
-npm link
-```
-
-You can now start Homebridge, use the `-D` flag so you can see debug log messages in your plugin:
-
-```
-homebridge -D
-```
-
-## Watch For Changes and Build Automatically
-
-If you want to have your code compile automatically as you make changes, and restart Homebridge automatically between changes, you first need to add your plugin as a platform in `~/.homebridge/config.json`:
-```
-{
-...
-    "platforms": [
-        {
-            "name": "Config",
-            "port": 8581,
-            "platform": "config"
+"accessories": [
+    ...
+    {
+            "name": "We Connect ID",
+            "platform": "WeConnectID",
+            "weconnect": {
+                "username": "We Connect username",
+                "password": "We Connect password",
+                "vin": "VIN OF YOUR CAR"
+            },
+            "options": {
+                "chargingAccessory": "Charging",
+                "climatisationAccessory": "Climatisation",
+                "locationMotionSensors": [
+                    {
+                        "name": "Home",
+                        "lat": 52.1234567,
+                        "lon": 5.1234567,
+                        "radius": 200
+                    },
+                    {
+                        "name": "Work",
+                        "lat": 52.2234567,
+                        "lon": 4.1234567,
+                        "radius": 100
+                    }
+                ],
+                "eventMotionSensors": [
+                    {
+                        "name": "Car unsafe state",
+                        "event": "statusNotSafe"
+                    }
+                ]
+            }
         },
-        {
-            "name": "<PLUGIN_NAME>",
-            //... any other options, as listed in config.schema.json ...
-            "platform": "<PLATFORM_NAME>"
-        }
-    ]
-}
+]
 ```
 
-and then you can run:
+* The `name` will be the identifier that you can use, for example, in Siri commands;
+* Replace `weconnect` options with the correct values;
+* Set charging- and climatisation accessory names.
+* You can add as many motion sensors to `locationMotionSensors` as you like (?). For each item a motion sensor will be created with `name` that triggers whenever the car is parked within `radius` distance around the location  (GPS `lat` and `lon`). Please respect the driver's privacy if using this option.
+* You can add even more motion sensors to `eventMotionSensors`. These create a motion sensor with `name` that triggers on a preset event. You can choose from the following list of events:
 
-```
-npm run watch
-```
+Events:
+* 'statusNotSafe' - car is parked and doors remain unlocked or windows opened for >5 minutes.
+* 'parked' - Car is parked. Emits parking position as argument.
+* 'notParked' - Car is on the move.
+* 'chargePurposeReached' - Target state of charge reached.
+* 'chargingStarted' - Charging started.
+* 'chargingStopped' - Charging stopped.
+* 'currentSOC' - Actuel state of charge changed. Emits SOC as argument.
+* 'climatisationStopped' - Climatisation stopped.
+* 'climatisationStarted' - Climatisation started.
+* 'climatisationCoolingStarted' - Climatisation started cooling.
+* 'climatisationHeatingStarted' - Climatisation started heating.
+* 'climatisationTemperatureUpdated' - Target climatisation temperature changed.
 
-This will launch an instance of Homebridge in debug mode which will restart every time you make a change to the source code. It will load the config stored in the default location under `~/.homebridge`. You may need to stop other running instances of Homebridge while using this command to prevent conflicts. You can adjust the Homebridge startup command in the [`nodemon.json`](./nodemon.json) file.
+## Charging accessory
+* Creates a switch for charging start and stop.
+* The switch contains a Lightbulb service to indicate state of charge in percent
+* Creates a motion sensor that triggers when the target charge level is reached
 
-## Customise Plugin
+## Motion sensors
+* One motion sensor is created that triggers whenever your car is parked and remains in an unsafe state (windows open, doors unlocked) for >5 minutes.
 
-You can now start customising the plugin template to suit your requirements.
-
-* [`src/platform.ts`](./src/platform.ts) - this is where your device setup and discovery should go.
-* [`src/platformAccessory.ts`](./src/platformAccessory.ts) - this is where your accessory control logic should go, you can rename or create multiple instances of this file for each accessory type you need to implement as part of your platform plugin. You can refer to the [developer documentation](https://developers.homebridge.io/) to see what characteristics you need to implement for each service type.
-* [`config.schema.json`](./config.schema.json) - update the config schema to match the config you expect from the user. See the [Plugin Config Schema Documentation](https://developers.homebridge.io/#/config-schema).
-
-## Versioning Your Plugin
-
-Given a version number `MAJOR`.`MINOR`.`PATCH`, such as `1.4.3`, increment the:
-
-1. **MAJOR** version when you make breaking changes to your plugin,
-2. **MINOR** version when you add functionality in a backwards compatible manner, and
-3. **PATCH** version when you make backwards compatible bug fixes.
-
-You can use the `npm version` command to help you with this:
-
-```bash
-# major update / breaking changes
-npm version major
-
-# minor update / new features
-npm version update
-
-# patch / bugfixes
-npm version patch
-```
-
-## Publish Package
-
-When you are ready to publish your plugin to [npm](https://www.npmjs.com/), make sure you have removed the `private` attribute from the [`package.json`](./package.json) file then run:
-
-```
-npm publish
-```
-
-If you are publishing a scoped plugin, i.e. `@username/homebridge-xxx` you will need to add `--access=public` to command the first time you publish.
-
-#### Publishing Beta Versions
-
-You can publish *beta* versions of your plugin for other users to test before you release it to everyone.
-
-```bash
-# create a new pre-release version (eg. 2.1.0-beta.1)
-npm version prepatch --preid beta
-
-# publish to @beta
-npm publish --tag=beta
-```
-
-Users can then install the  *beta* version by appending `@beta` to the install command, for example:
-
-```
-sudo npm install -g homebridge-example-plugin@beta
-```
-
-
+## Climatisation
+* Set climatisation temperature 
+* Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
