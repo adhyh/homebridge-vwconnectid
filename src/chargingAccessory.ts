@@ -74,7 +74,7 @@ export class ChargingAccessory {
 
       setInterval(() => {
         targetSOCreachedService.updateCharacteristic(this.platform.Characteristic.MotionDetected, false);
-      }, 10000);
+      }, 60 * 1000);
     });
 
     this.platform.idStatusEmitter.on('chargingStarted', () => {
