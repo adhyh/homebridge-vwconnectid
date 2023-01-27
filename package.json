@@ -23,11 +23,24 @@
     "build": "rimraf ./dist && tsc",
     "prepublishOnly": "npm run lint && npm run build"
   },
-  "keywords": [
-    "homebridge-plugin"
-  ],
+"keywords": [
+    "homebridge-plugin",
+    "Volkswagen",
+    "weconnect",
+    "we connect",
+    "API",
+    "ID.3",
+    "ID.4",
+    "ID.5",
+    "ID 3",
+    "ID 4",
+    "ID 5",
+    "weconnectid",
+    "vw connect",
+    "carnet"
+  ],  
   "dependencies": {
-    "npm-vwconnectapi": "file:npm-vwconnectapi"
+    "npm-vwconnectidapi": "^1.0.3"
   },
   "devDependencies": {
     "@types/node": "^16.10.9",
@@ -38,6 +51,6 @@
     "nodemon": "^2.0.13",
     "rimraf": "^3.0.2",
     "ts-node": "^10.3.0",
-    "typescript": "^4.4.4"
+    "typescript": "^4.9.4"
   }
 }
