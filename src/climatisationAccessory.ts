@@ -20,6 +20,13 @@ export class ClimatisationAccessory {
 
     this.service.setCharacteristic(this.platform.Characteristic.Name, this.accessory.displayName);
 
+    const MorningClimaSwitchService = this.accessory.getService(Morning clima') ||
+      this.accessory.addService(this.platform.Service.Switch, 'Morning clima', 'YourUniqueIdentifier-4');
+
+    MorningClimaSwitchService.setCharacteristic(this.platform.Characteristic.ConfiguredName, 'Morning clima');
+    MorningClimaSwitchService.setCharacteristic(this.platform.Characteristic.IsConfigured,
+      this.platform.Characteristic.IsConfigured.CONFIGURED);
+      
     this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature)
       .onSet(this.setTargetTemperature.bind(this))
       .onGet(this.getTargetTemperature.bind(this));
