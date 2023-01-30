@@ -20,7 +20,7 @@ export class ClimatisationAccessory {
 
     this.service.setCharacteristic(this.platform.Characteristic.Name, this.accessory.displayName);
 
-    const MorningClimaSwitchService = this.accessory.getService(Morning clima') ||
+    const MorningClimaSwitchService = this.accessory.getService('Morning clima') ||
       this.accessory.addService(this.platform.Service.Switch, 'Morning clima', 'YourUniqueIdentifier-4');
 
     MorningClimaSwitchService.setCharacteristic(this.platform.Characteristic.ConfiguredName, 'Morning clima');
