@@ -1,5 +1,4 @@
 {
-  "private": true,
   "displayName": "WeConnect ID",
   "name": "homebridge-weconnectid",
   "version": "1.0.0",
