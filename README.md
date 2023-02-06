@@ -7,7 +7,7 @@ Uses the [`npm-vwconnectidapi`](https://github.com/adhyh/npm-vwconnectidapi) mod
 ## Installation
 
 ```
-$ npm i homebridge-weconnectid -g
+$ npm i homebridge-vwconnectid -g
 ```
 
 Homebridge plugins need to be installed globally, so the `-g` is mandatory.
