@@ -6,4 +6,4 @@ export const PLATFORM_NAME = 'WeConnectID';
 /**
  * This must match the name of your plugin as defined the package.json
  */
-export const PLUGIN_NAME = 'homebridge-weconnectid';
+export const PLUGIN_NAME = 'homebridge-vwconnectid';
