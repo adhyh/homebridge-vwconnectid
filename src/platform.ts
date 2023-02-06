@@ -55,10 +55,12 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       this.log.info('Restoring existing charging accessory from cache:', existingChargingAccessory.displayName);
       new ChargingAccessory(this, existingChargingAccessory);
     } else {
-      this.log.info('Adding new charging accessory:', this.config.options.chargingAccessory || 'Charging');
-      const accessory = new this.api.platformAccessory(this.config.options.chargingAccessory || 'Charging', chargingUuid);
-      new ChargingAccessory(this, accessory);
-      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      if (this.config.options.chargingAccessory !== undefined) {
+        this.log.info('Adding new charging accessory:', this.config.options.chargingAccessory || 'Charging');
+        const accessory = new this.api.platformAccessory(this.config.options.chargingAccessory || 'Charging', chargingUuid);
+        new ChargingAccessory(this, accessory);
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
     }
 
     // climatisation accessory
@@ -68,12 +70,14 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       this.log.info('Restoring existing climatisation accessory from cache:', existingClimatisationAccessory.displayName);
       new ClimatisationAccessory(this, existingClimatisationAccessory);
     } else {
-      this.log.info('Adding new climatisation accessory:', this.config.options.climatisationAccessory || 'Climatisation');
-      const accessory = new this.api.platformAccessory(this.config.options.climatisationAccessory ||
-        'Climatisation', climatisationUuid);
+      if (this.config.options.climatisationAccessory !== undefined) {
+        this.log.info('Adding new climatisation accessory:', this.config.options.climatisationAccessory || 'Climatisation');
+        const accessory = new this.api.platformAccessory(this.config.options.climatisationAccessory ||
+          'Climatisation', climatisationUuid);
 
-      new ClimatisationAccessory(this, accessory);
-      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        new ClimatisationAccessory(this, accessory);
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
     }
 
     for (const device of this.config.options.locationMotionSensors) {
