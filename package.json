@@ -1,15 +1,15 @@
 {
   "displayName": "WeConnect ID",
-  "name": "homebridge-weconnectid",
+  "name": "homebridge-vwconnectid",
   "version": "1.0.0",
-  "description": "Interface to Volkswagen ID.x cars",
+  "description": "Homebridge plugin for Volkswagen ID.x cars",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adhyh/homebridge-weconnectid.git"
+    "url": "https://github.com/adhyh/homebridge-vwconnectid.git"
   },
   "bugs": {
-    "url": "https://github.com/adhyh/homebridge-weconnectid/issues"
+    "url": "https://github.com/adhyh/homebridge-vwconnectid/issues"
   },
   "engines": {
     "node": ">=12.0.0",
