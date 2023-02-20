@@ -4,6 +4,10 @@ This is a plugin for Homebridge to allow controlling your Volkswagen ID series (
 
 Uses the [`npm-vwconnectidapi`](https://github.com/adhyh/npm-vwconnectidapi) module under the hood to communicate with the Volkwagen backend.
 
+## 405 error Login Failed
+
+If you see 405 error Login Failed in your homebridge log, you can fix it by going to http://myvolkswagen.de, login, and accept the (new) terms and conditions. You may need to login multiple times and accept T&C each time.
+
 ## Installation
 
 ```
