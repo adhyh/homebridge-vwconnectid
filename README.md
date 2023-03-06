@@ -38,6 +38,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
                 "vin": "VIN OF YOUR CAR"
             },
             "options": {
+                "logLevel": "NONE",
                 "chargingAccessory": "Charging",
                 "climatisationAccessory": "Climatisation",
                 "locationMotionSensors": [
