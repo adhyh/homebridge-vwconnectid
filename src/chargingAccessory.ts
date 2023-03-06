@@ -37,6 +37,14 @@ export class ChargingAccessory {
     chargePercentageService.getCharacteristic(this.platform.Characteristic.On)
       .onGet(this.getBatteryLevelOn.bind(this));
 
+    const batteryService = this.accessory.getService('BatteryLevel') ||
+      this.accessory.addService(this.platform.Service.BatteryService, 'BatteryLevel', 'YourUniqueIdentifier-3');
+
+    batteryService.setCharacteristic(this.platform.Characteristic.ConfiguredName, 'BatteryLevel');
+
+    batteryService.getCharacteristic(this.platform.Characteristic.BatteryLevel)
+      .onGet(this.getBatteryLevel.bind(this));
+      
     const targetSOCreachedService = this.accessory.getService('Charge Level Reached') ||
       this.accessory.addService(this.platform.Service.MotionSensor, 'Charge Level Reached', 'YourUniqueIdentifier-2');
 
