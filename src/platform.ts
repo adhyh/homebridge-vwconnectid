@@ -22,7 +22,7 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
   ) {
 
     this.log.info('Finished initializing platform:', this.config.name);
-    //this.vwConn.setLogLevel('DEBUG');
+    this.vwConn.setLogLevel(this.config.options.logLevel || 'ERROR');
     this.vwConn.setCredentials(this.config.weconnect.username, this.config.weconnect.password);
     
     this.api.on('didFinishLaunching', () => {
