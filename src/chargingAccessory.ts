@@ -4,6 +4,7 @@ import { WeConnectIDPlatform } from './platform';
 
 export class ChargingAccessory {
   private service: Service;
+  private timer;
 
   constructor(
     private readonly platform: WeConnectIDPlatform,
@@ -44,7 +45,7 @@ export class ChargingAccessory {
 
     batteryService.getCharacteristic(this.platform.Characteristic.BatteryLevel)
       .onGet(this.getBatteryLevel.bind(this));
-      
+
     const targetSOCreachedService = this.accessory.getService('Charge Level Reached') ||
       this.accessory.addService(this.platform.Service.MotionSensor, 'Charge Level Reached', 'YourUniqueIdentifier-2');
 
@@ -87,7 +88,17 @@ export class ChargingAccessory {
   }
 
   async setBatteryLevel(value: CharacteristicValue) {
-    this.platform.log.info('Set Characteristic Brightness ->', value);
+    const targetPercentage = Math.max(50, Math.round((value as number) / 10) * 10);
+
+    clearTimeout(this.timer);
+
+    this.timer = setTimeout(() => {
+
+      this.accessory.getService(this.platform.Service.Lightbulb)!.getCharacteristic(this.platform.Characteristic.Brightness).updateValue(this.platform.vwConn.idData.charging.batteryStatus.value.currentSOC_pct);
+      this.platform.vwConn.setChargingSettings(targetPercentage, "")
+      this.platform.log.info('Set Characteristic target battery level ->', targetPercentage);
+    }, 5000);
+
   }
 
   async getOn(): Promise<CharacteristicValue> {
