@@ -89,7 +89,7 @@ Events:
 
 ## Charging accessory
 * Creates a switch for charging start and stop.
-* The switch contains a Lightbulb service to (visually) indicate state of charge in percent
+* The switch contains a Lightbulb service to (visually) indicate current state of charge in percent. It can also be used to set the target charge percentage of the battery (>= 50%).
 * Contains a BatteryLevel service, so you can ask siri as well
 * Creates a motion sensor that triggers when the target charge level is reached
 
