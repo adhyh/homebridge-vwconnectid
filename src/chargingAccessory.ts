@@ -95,7 +95,7 @@ export class ChargingAccessory {
     this.timer = setTimeout(() => {
 
       this.accessory.getService(this.platform.Service.Lightbulb)!.getCharacteristic(this.platform.Characteristic.Brightness).updateValue(this.platform.vwConn.idData.charging.batteryStatus.value.currentSOC_pct);
-      this.platform.vwConn.setChargingSettings(targetPercentage, "")
+      this.platform.vwConn.setChargingSetting("targetSOC", targetPercentage);
       this.platform.log.info('Set Characteristic target battery level ->', targetPercentage);
     }, 5000);
 
