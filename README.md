@@ -126,3 +126,6 @@ Events:
 ## Climatisation
 * Set climatisation temperature 
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
+
+## Changelog
+1.0.4: Add setting switches for climatisation and charging. Set charging 'brightness' for target battery level.
