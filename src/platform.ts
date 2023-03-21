@@ -2,6 +2,7 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { ChargingAccessory } from './chargingAccessory';
 import { ClimatisationAccessory } from './climatisationAccessory';
+import { SettingAccessory } from './settingsAccessory';
 import { LocationMotionSensorAccessory } from './locationMotionSensorAccessory';
 import { EventMotionSensorAccessory } from './eventMotionSensorAccessory';
 import * as vwapi from 'npm-vwconnectidapi';
@@ -111,6 +112,24 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
 
         accessory.context.device = device;
         new EventMotionSensorAccessory(this, accessory);
+
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
+    }
+
+    for (const device of this.config.options.settingSwitches) {
+      const uuid = this.api.hap.uuid.generate(device.name);
+      const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+
+      if (existingAccessory) {
+        this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+        new SettingAccessory(this, existingAccessory);
+      } else {
+        this.log.info('Adding new accessory:', device.name);
+        const accessory = new this.api.platformAccessory(device.name, uuid);
+
+        accessory.context.device = device;
+        new SettingAccessory(this, accessory);
 
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
