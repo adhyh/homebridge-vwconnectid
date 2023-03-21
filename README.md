@@ -55,6 +55,32 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
                         "radius": 100
                     }
                 ],
+                "settingSwitches": [
+                    {
+                        "name": "Reduced AC",
+                        "setting": "reducedAC"
+                    },
+                    {
+                        "name": "Plug Unlock",
+                        "setting": "autoUnlockPlug"
+                    },
+                    {
+                        "name": "Climatization at unlock",
+                        "setting": "climatizationAtUnlock"
+                    },
+                    {
+                        "name": "Window Heating",
+                        "setting": "climatisationWindowHeating"
+                    },
+                    {
+                        "name": "Front Left Zone",
+                        "setting": "climatisationFrontLeft"
+                    },
+                    {
+                        "name": "Front Right Zone",
+                        "setting": "climatisationFrontRight"
+                    }
+                ],
                 "eventMotionSensors": [
                     {
                         "name": "Car unsafe state",
@@ -70,6 +96,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
 * Replace `weconnect` options with the correct values;
 * set `logLevel` to `NONE`, `DEBUG`, `INFO` or `ERROR`. Set to NONE if you think backend is too chatty. Defaults to ERROR. 
 * Set charging- and climatisation accessory names. Remove these options to avoid creating the accessories alltogether.
+* Select setting switches to be exposed by Homekit. 
 * You can add as many motion sensors to `locationMotionSensors` as you like (?). For each item a motion sensor will be created with `name` that triggers whenever the car is parked within `radius` distance around the location  (GPS `lat` and `lon`). Please respect the driver's privacy if using this option.
 * You can add even more motion sensors to `eventMotionSensors`. These create a motion sensor with `name` that triggers on a preset event. You can choose from the following list of events:
 
