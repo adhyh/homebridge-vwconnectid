@@ -21,6 +21,10 @@ export class LocationMotionSensorAccessory {
         this.service.getCharacteristic(this.platform.Characteristic.MotionDetected)
             .onGet(this.getMotionDetected.bind(this));
 
+        if (typeof this.accessory.context.device.radius === 'undefined') {
+            this.accessory.context.device.radius = this.accessory.context.device.notificationRadius;
+        }
+
         this.platform.idStatusEmitter.on('parked', (data) => {
             if (this.parkedInRange(
                 this.accessory.context.device.lat,
@@ -40,8 +44,8 @@ export class LocationMotionSensorAccessory {
     }
 
     parkedInRange(lat1, lon1, lat2, lon2, radius) {
-        const R = 6371; 
-        const dLat = this.deg2rad(lat2 - lat1);  
+        const R = 6371;
+        const dLat = this.deg2rad(lat2 - lat1);
         const dLon = this.deg2rad(lon2 - lon1);
         const a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -49,7 +53,7 @@ export class LocationMotionSensorAccessory {
             Math.sin(dLon / 2) * Math.sin(dLon / 2)
             ;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const d = R * c; 
+        const d = R * c;
         return (d * 1000 <= radius);
     }
 
