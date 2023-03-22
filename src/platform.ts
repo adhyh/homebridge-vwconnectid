@@ -5,6 +5,7 @@ import { ClimatisationAccessory } from './climatisationAccessory';
 import { SettingAccessory } from './settingsAccessory';
 import { LocationMotionSensorAccessory } from './locationMotionSensorAccessory';
 import { EventMotionSensorAccessory } from './eventMotionSensorAccessory';
+import { DestinationSwitchAccessory } from './destinationSwitchAccessory';
 import * as vwapi from 'npm-vwconnectidapi';
 import { config } from 'process';
 
@@ -25,13 +26,13 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
     this.log.info('Finished initializing platform:', this.config.name);
     this.vwConn.setLogLevel(this.config.options.logLevel || 'ERROR');
     this.vwConn.setCredentials(this.config.weconnect.username, this.config.weconnect.password);
-    
+
     this.api.on('didFinishLaunching', () => {
       log.info('Executed didFinishLaunching callback');
-      
+
       this.vwConn.getData()
         .then(() => {
-          this.vwConn.setActiveVin(this.config.weconnect.vin); 
+          this.vwConn.setActiveVin(this.config.weconnect.vin);
           this.discoverDevices();
         })
         .catch((error) => {
@@ -81,22 +82,69 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       }
     }
 
-    for (const device of this.config.options.locationMotionSensors) {
-      const uuid = this.api.hap.uuid.generate(device.name);
-      const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+    if (typeof this.config.options.destinations !== 'undefined') {
+      for (const device of this.config.options.destinations) {
 
-      if (existingAccessory) {
-        this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
-        new LocationMotionSensorAccessory(this, existingAccessory);
-      } else {
-        this.log.info('Adding new accessory:', device.name);
-        const accessory = new this.api.platformAccessory(device.name, uuid);
+        if (typeof device.address !== 'undefined') {
+          const uuid = this.api.hap.uuid.generate(device.name + '-dest');
+          const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
-        accessory.context.device = device;
-        new LocationMotionSensorAccessory(this, accessory);
+          if (existingAccessory) {
+            this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+            new DestinationSwitchAccessory(this, existingAccessory);
+          } else {
+            this.log.info('Adding new accessory:', device.name);
+            const accessory = new this.api.platformAccessory(device.name, uuid);
 
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+            accessory.context.device = device;
+            new DestinationSwitchAccessory(this, accessory);
+
+            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+          }
+        }
+
+        if (typeof device.notificationRadius !== 'undefined') {
+          const uuid = this.api.hap.uuid.generate(device.name);
+          const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+
+          if (existingAccessory) {
+            this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+            new LocationMotionSensorAccessory(this, existingAccessory);
+          } else {
+            this.log.info('Adding new accessory:', device.name);
+            const accessory = new this.api.platformAccessory(device.name, uuid);
+
+            accessory.context.device = device;
+            new LocationMotionSensorAccessory(this, accessory);
+
+            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+          }
+        }
       }
+
+    } else {
+      for (const device of this.config.options.locationMotionSensors) {
+        this.log.warn("warning: you're missing out on some cool new features. Please update your config.json.");
+        const uuid = this.api.hap.uuid.generate(device.name);
+        const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+
+        if (existingAccessory) {
+          this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+          new LocationMotionSensorAccessory(this, existingAccessory);
+        } else {
+          this.log.info('Adding new accessory:', device.name);
+          const accessory = new this.api.platformAccessory(device.name, uuid);
+
+          accessory.context.device = device;
+          new LocationMotionSensorAccessory(this, accessory);
+
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        }
+      }
+    }
+
+    if (typeof this.config.options.locationMotionSensors !== 'undefined' && typeof this.config.options.destinations !== 'undefined') {
+      this.log.warn("warning: you have upgraded your configuration. The 'locationMotionSensors' block in your current config.json is not processed and may be removed.");
     }
 
     for (const device of this.config.options.eventMotionSensors) {
