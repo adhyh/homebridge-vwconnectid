@@ -41,18 +41,30 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
                 "logLevel": "NONE",
                 "chargingAccessory": "Charging",
                 "climatisationAccessory": "Climatisation",
-                "locationMotionSensors": [
+                "destinations": [
                     {
                         "name": "Home",
                         "lat": 52.1234567,
                         "lon": 5.1234567,
-                        "radius": 200
+                        "address": {
+                            "country": "Nederland",
+                            "street": "My street 4",
+                            "zipCode": "1234 AB",
+                            "city": "Coolplace"
+                        },
+                        "notificationRadius": 200
                     },
                     {
                         "name": "Work",
-                        "lat": 52.2234567,
-                        "lon": 4.1234567,
-                        "radius": 100
+                        "lat": 52.2345678,
+                        "lon": 4.2345678,
+                        "address": {
+                            "country": "Nederland",
+                            "street": "My street 5",
+                            "zipCode": "1234 BC",
+                            "city": "Coolplace"
+                        },
+                        "notificationRadius": 100
                     }
                 ],
                 "settingSwitches": [
@@ -97,7 +109,10 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
 * set `logLevel` to `NONE`, `DEBUG`, `INFO` or `ERROR`. Set to NONE if you think backend is too chatty. Defaults to ERROR. 
 * Set charging- and climatisation accessory names. Remove these options to avoid creating the accessories alltogether.
 * Select setting switches to be exposed by Homekit. 
-* You can add as many motion sensors to `locationMotionSensors` as you like (?). For each item a motion sensor will be created with `name` that triggers whenever the car is parked within `radius` distance around the location  (GPS `lat` and `lon`). Please respect the driver's privacy if using this option.
+* `locationMotionSensors` are now deprecated.
+* Add your `destinations`. At least a `name` and `lat`, `lon` GPS coordinates. For each item:
+  * If an `address` block is present, a switch will  be created that sends the destination to your car's navigation system.
+  * If a `notificationRadius` is specified, a motion sensor will be created with that triggers whenever the car is parked within `notificationRadius` meters distance around the location  (GPS `lat` and `lon`). Please respect the driver's privacy if using this option.
 * You can add even more motion sensors to `eventMotionSensors`. These create a motion sensor with `name` that triggers on a preset event. You can choose from the following list of events:
 
 Events:
@@ -128,4 +143,5 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
-1.0.4: Add setting switches for climatisation and charging. Set charging 'brightness' for target battery level.
+* 1.0.5: Move locationMotionSensors to the new destinations block. Destinations can be sent to the car's navigation and expose a motion trigger.
+* 1.0.4: Add setting switches for climatisation and charging. Set charging 'brightness' for target battery level.
