@@ -11,9 +11,10 @@ import { config } from 'process';
 export class WeConnectIDPlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
   public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
-  public readonly vwlog = new vwapi.Log();
+  public readonly vwLog = new vwapi.Log();
   public readonly vwConn = new vwapi.VwWeConnect();
   public readonly idStatusEmitter = vwapi.idStatusEmitter;
+  public readonly idLogEmitter = vwapi.idLogEmitter;
   public readonly accessories: PlatformAccessory[] = [];
 
   constructor(
@@ -23,15 +24,22 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
   ) {
 
     this.log.info('Finished initializing platform:', this.config.name);
-    this.vwConn.setLogLevel(this.config.options.logLevel || 'ERROR');
+    this.vwConn.setLogLevel(this.config.options.logLevel || 'ERROR', true);
+    //this.vwConn.setLogLevel()
+
+    this.idLogEmitter.on('DEBUG', (data) => { this.log.info(data); });
+    this.idLogEmitter.on('ERROR', (data) => { this.log.info(data); });
+    this.idLogEmitter.on('INFO', (data) => { this.log.info(data); });
+    this.idLogEmitter.on('WARN', (data) => { this.log.info(data); });
+
     this.vwConn.setCredentials(this.config.weconnect.username, this.config.weconnect.password);
-    
+
     this.api.on('didFinishLaunching', () => {
       log.info('Executed didFinishLaunching callback');
-      
+
       this.vwConn.getData()
         .then(() => {
-          this.vwConn.setActiveVin(this.config.weconnect.vin); 
+          this.vwConn.setActiveVin(this.config.weconnect.vin);
           this.discoverDevices();
         })
         .catch((error) => {
