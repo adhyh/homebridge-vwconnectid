@@ -28,9 +28,9 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
     //this.vwConn.setLogLevel()
 
     this.idLogEmitter.on('DEBUG', (data) => { this.log.info(data); });
-    this.idLogEmitter.on('ERROR', (data) => { this.log.info(data); });
+    this.idLogEmitter.on('ERROR', (data) => { this.log.error(data); });
     this.idLogEmitter.on('INFO', (data) => { this.log.info(data); });
-    this.idLogEmitter.on('WARN', (data) => { this.log.info(data); });
+    this.idLogEmitter.on('WARN', (data) => { this.log.warn(data); });
 
     this.vwConn.setCredentials(this.config.weconnect.username, this.config.weconnect.password);
 
