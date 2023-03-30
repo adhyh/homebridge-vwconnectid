@@ -24,6 +24,48 @@ export class SettingAccessory {
     this.service.getCharacteristic(this.platform.Characteristic.On)
       .onSet(this.setOn.bind(this))
       .onGet(this.getOn.bind(this));
+
+    switch (this.accessory.context.device.setting) {
+
+      case 'climatizationAtUnlock':
+        this.platform.idStatusEmitter.on('climatisationAtUnlockUpdated', () => {
+          this.service.updateCharacteristic(this.platform.Characteristic.On,
+            this.platform.vwConn.idData.climatisation.climatisationSettings.value.climatizationAtUnlock);
+        }); break;
+
+      case 'climatisationWindowHeating':
+        this.platform.idStatusEmitter.on('windowHeatingUpdated', () => {
+          this.service.updateCharacteristic(this.platform.Characteristic.On,
+            this.platform.vwConn.idData.climatisation.climatisationSettings.value.windowHeatingEnabled);
+        }); break;
+
+      case 'climatisationFrontLeft':
+        this.platform.idStatusEmitter.on('zoneFrontLeftUpdated', () => {
+          this.service.updateCharacteristic(this.platform.Characteristic.On,
+            this.platform.vwConn.idData.climatisation.climatisationSettings.value.zoneFrontLeftEnabled);
+        }); break;
+
+      case 'climatisationFrontRight':
+        this.platform.idStatusEmitter.on('zoneFrontRightUpdated', () => {
+          this.service.updateCharacteristic(this.platform.Characteristic.On,
+            this.platform.vwConn.idData.climatisation.climatisationSettings.value.zoneFrontRightEnabled);
+        }); break;
+
+      case 'reducedAC':
+        this.platform.idStatusEmitter.on('reducedACupdated', () => {
+          this.service.updateCharacteristic(this.platform.Characteristic.On,
+            this.platform.vwConn.idData.charging.chargingSettings.value.maxChargeCurrentAC === 'reduced');
+        }); break;
+
+      case 'autoUnlockPlug':
+        this.platform.idStatusEmitter.on('autoUnlockPlugUpdated', () => {
+          this.service.updateCharacteristic(this.platform.Characteristic.On,
+            this.platform.vwConn.idData.charging.chargingSettings.value.autoUnlockPlugWhenCharged === 'permanent');
+        }); break;
+
+      default: break;
+
+    }
   }
 
   async setOn(value: CharacteristicValue) {
