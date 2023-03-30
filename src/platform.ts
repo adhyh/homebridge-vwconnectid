@@ -94,10 +94,10 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
       if (existingAccessory) {
-        this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+        this.log.info('Restoring existing location motion sensor accessory from cache:', existingAccessory.displayName);
         new LocationMotionSensorAccessory(this, existingAccessory);
       } else {
-        this.log.info('Adding new accessory:', device.name);
+        this.log.info('Adding new location motion sensor accessory:', device.name);
         const accessory = new this.api.platformAccessory(device.name, uuid);
 
         accessory.context.device = device;
@@ -112,10 +112,10 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
       if (existingAccessory) {
-        this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+        this.log.info('Restoring existing event motions sensor accessory from cache:', existingAccessory.displayName);
         new EventMotionSensorAccessory(this, existingAccessory);
       } else {
-        this.log.info('Adding new accessory:', device.name);
+        this.log.info('Adding new event motion sensor accessory:', device.name);
         const accessory = new this.api.platformAccessory(device.name, uuid);
 
         accessory.context.device = device;
@@ -130,10 +130,10 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
       if (existingAccessory) {
-        this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+        this.log.info('Restoring existing setting switch accessory from cache:', existingAccessory.displayName);
         new SettingAccessory(this, existingAccessory);
       } else {
-        this.log.info('Adding new accessory:', device.name);
+        this.log.info('Adding new setting switch accessory:', device.name);
         const accessory = new this.api.platformAccessory(device.name, uuid);
 
         accessory.context.device = device;
