@@ -107,6 +107,7 @@ Events:
 * 'chargePurposeReached' - Target state of charge reached.
 * 'chargingStarted' - Charging started.
 * 'chargingStopped' - Charging stopped.
+* 'noExternalPower' - Plug is connected and external power does not become available (charging cannot be started).
 * 'currentSOC' - Actuel state of charge changed. Emits SOC as argument.
 * 'climatisationStopped' - Climatisation stopped.
 * 'climatisationStarted' - Climatisation started.
@@ -128,6 +129,8 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
-* 1.0.6: Prettified backend & plugin log messages.
+* 1.0.6: 
+* * 'noExternalPower' event triggers when plug is connected and external power does not become available (charging cannot be started).
+* * Prettified backend & plugin log messages.
 * 1.0.5: Bugfix events.
 * 1.0.4: Add setting switches for climatisation and charging. Set charging 'brightness' for target battery level.
