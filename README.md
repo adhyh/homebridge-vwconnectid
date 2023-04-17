@@ -96,7 +96,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
 * The `name` will be the identifier that you can use, for example, in Siri commands;
 * Replace `weconnect` options with the correct values;
 * set `logLevel` to `NONE`, `DEBUG`, `INFO` or `ERROR`. Set to NONE if you think backend is too chatty. Defaults to ERROR. 
-* Set charging- and climatisation accessory names. Remove these options to avoid creating the accessories alltogether.
+* Set charging, remaining range, and climatisation accessory names. Remove these options to avoid creating the accessories alltogether.
 * Select setting switches to be exposed by Homekit. 
 * You can add as many motion sensors to `locationMotionSensors` as you like (?). For each item a motion sensor will be created with `name` that triggers whenever the car is parked within `radius` distance around the location  (GPS `lat` and `lon`). Please respect the driver's privacy if using this option.
 * You can add even more motion sensors to `eventMotionSensors`. These create a motion sensor with `name` that triggers on a preset event. You can choose from the following list of events:
