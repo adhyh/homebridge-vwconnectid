@@ -41,6 +41,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
                 "logLevel": "NONE",
                 "chargingAccessory": "Charging",
                 "climatisationAccessory": "Climatisation",
+                "remainingRangeAccessory: "Remaining km",
                 "locationMotionSensors": [
                     {
                         "name": "Home",
@@ -130,6 +131,8 @@ Events:
 
 ## Changelog
 * 1.0.6: 
+* * Added light sensor (lux) that indicates the remaining range in km.
+* * Added 'locked' event (motion sensor) that changes state with door (un)lock.
 * * 'noExternalPower' event triggers when plug is connected and external power does not become available (charging cannot be started).
 * * Prettified backend & plugin log messages.
 * 1.0.5: Bugfix events.
