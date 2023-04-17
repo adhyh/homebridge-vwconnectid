@@ -103,6 +103,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
 
 Events:
 * 'statusNotSafe' - car is parked and doors remain unlocked or windows opened for >5 minutes.
+* 'locked' - Indicates lock state
 * 'parked' - Car is parked. Emits parking position as argument.
 * 'notParked' - Car is on the move.
 * 'chargePurposeReached' - Target state of charge reached.
