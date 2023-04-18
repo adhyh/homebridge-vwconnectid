@@ -151,7 +151,7 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       }
 
     } else if (typeof this.config.options.locationMotionSensors !== 'undefined') {
-      this.log.error('Location aware functionality has changed. Please update your config.json. You\'re missing out on a cool new feature!');
+      this.log.error('Location aware functionality has changed. Please update your config.json. You\'re missing out on a cool new feature! See https://github.com/adhyh/homebridge-vwconnectid#upgrading-from-105-to-110 for details.');
       for (const device of this.config.options.locationMotionSensors) {
         const uuid = this.api.hap.uuid.generate(device.name);
         const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
