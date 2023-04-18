@@ -1,7 +1,7 @@
 {
   "displayName": "WeConnect ID",
   "name": "homebridge-vwconnectid",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Homebridge plugin for Volkswagen ID.x cars",
   "license": "Apache-2.0",
   "repository": {
@@ -40,7 +40,7 @@
     "carnet"
   ],  
   "dependencies": {
-    "npm-vwconnectidapi": "^1.0.7"
+    "npm-vwconnectidapi": "1.0.7"
   },
   "devDependencies": {
     "@types/node": "^16.10.9",
