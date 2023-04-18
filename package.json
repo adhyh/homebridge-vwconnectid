@@ -40,7 +40,7 @@
     "carnet"
   ],  
   "dependencies": {
-    "npm-vwconnectidapi": "1.0.7"
+    "npm-vwconnectidapi": "1.1.0"
   },
   "devDependencies": {
     "@types/node": "^16.10.9",
