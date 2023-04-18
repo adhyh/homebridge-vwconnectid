@@ -33,7 +33,7 @@ export class DestinationSwitchAccessory {
 
     if (value as boolean) {
 
-      var destination = { destinations: [{ poiProvider: 'unknown', destinationName: this.accessory.context.device.name, address: this.accessory.context.device.address, destinationSource: 'MobileApp', geoCoordinate: { longitude: this.accessory.context.device.lon, latitude: this.accessory.context.device.lat } }] };
+      let destination = { destinations: [{ poiProvider: 'unknown', destinationName: this.accessory.context.device.name, address: this.accessory.context.device.address, destinationSource: 'MobileApp', geoCoordinate: { longitude: this.accessory.context.device.lon, latitude: this.accessory.context.device.lat } }] };
 
       this.platform.vwConn.setDestination(destination);
 
