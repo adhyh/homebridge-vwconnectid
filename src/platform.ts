@@ -1,10 +1,11 @@
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
-import { ChargingAccessory } from './chargingAccessory';
+import { ChargingAccessory, RemainingRangeAccessory } from './chargingAccessory';
 import { ClimatisationAccessory } from './climatisationAccessory';
 import { SettingAccessory } from './settingsAccessory';
 import { LocationMotionSensorAccessory } from './locationMotionSensorAccessory';
 import { EventMotionSensorAccessory } from './eventMotionSensorAccessory';
+import { DestinationSwitchAccessory } from './destinationSwitchAccessory';
 import * as vwapi from 'npm-vwconnectidapi';
 import { config } from 'process';
 
@@ -72,6 +73,20 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       }
     }
 
+    const remainingRangeUuid = this.api.hap.uuid.generate('remainingRange');
+    const existingRemainingRangeAccessory = this.accessories.find(accessory => accessory.UUID === remainingRangeUuid);
+    if (existingRemainingRangeAccessory) {
+      this.log.info('Restoring existing remaining range accessory from cache:', existingRemainingRangeAccessory.displayName);
+      new RemainingRangeAccessory(this, existingRemainingRangeAccessory);
+    } else {
+      if (this.config.options.remainingRangeAccessory !== undefined) {
+        this.log.info('Adding new remaining range accessory:', this.config.options.remainingRangeAccessory || 'Remaining range');
+        const accessory = new this.api.platformAccessory(this.config.options.remainingRangeAccessory || 'Remaining range', remainingRangeUuid);
+        new RemainingRangeAccessory(this, accessory);
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
+    }
+
     // climatisation accessory
     const climatisationUuid = this.api.hap.uuid.generate('climatisation');
     const existingClimatisationAccessory = this.accessories.find(accessory => accessory.UUID === climatisationUuid);
@@ -89,21 +104,70 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       }
     }
 
-    for (const device of this.config.options.locationMotionSensors) {
-      const uuid = this.api.hap.uuid.generate(device.name);
-      const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+    // location based stuff
+    if (typeof this.config.options.destinations !== 'undefined') {
 
-      if (existingAccessory) {
-        this.log.info('Restoring existing location motion sensor accessory from cache:', existingAccessory.displayName);
-        new LocationMotionSensorAccessory(this, existingAccessory);
-      } else {
-        this.log.info('Adding new location motion sensor accessory:', device.name);
-        const accessory = new this.api.platformAccessory(device.name, uuid);
+      if (typeof this.config.options.locationMotionSensors !== 'undefined') {
+        this.log.error('You have both \'destinations\' and \'locationMotionSensors\' blocks in your config. The latter is not processed, please remove.');
+      }
 
-        accessory.context.device = device;
-        new LocationMotionSensorAccessory(this, accessory);
+      for (const device of this.config.options.destinations) {
 
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        // destination switches
+        if (typeof device.address !== 'undefined') {
+          const uuid = this.api.hap.uuid.generate(device.name + '-dest');
+          const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+          if (existingAccessory) {
+            this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+            new DestinationSwitchAccessory(this, existingAccessory);
+          } else {
+            this.log.info('Adding new accessory:', device.name);
+            const accessory = new this.api.platformAccessory(device.name, uuid);
+            accessory.context.device = device;
+            new DestinationSwitchAccessory(this, accessory);
+            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+          }
+        }
+
+        // destination motion sensors
+        if (typeof device.notificationRadius !== 'undefined') {
+          const uuid = this.api.hap.uuid.generate(device.name);
+          const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+
+          if (existingAccessory) {
+            this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+            new LocationMotionSensorAccessory(this, existingAccessory);
+          } else {
+            this.log.info('Adding new accessory:', device.name);
+            const accessory = new this.api.platformAccessory(device.name, uuid);
+
+            accessory.context.device = device;
+            new LocationMotionSensorAccessory(this, accessory);
+
+            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+          }
+        }
+
+      }
+
+    } else if (typeof this.config.options.locationMotionSensors !== 'undefined') {
+      this.log.error('Location aware functionality has changed. Please update your config.json. You\'re missing out on a cool new feature!');
+      for (const device of this.config.options.locationMotionSensors) {
+        const uuid = this.api.hap.uuid.generate(device.name);
+        const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+
+        if (existingAccessory) {
+          this.log.info('Restoring existing location motion sensor accessory from cache:', existingAccessory.displayName);
+          new LocationMotionSensorAccessory(this, existingAccessory);
+        } else {
+          this.log.info('Adding new location motion sensor accessory:', device.name);
+          const accessory = new this.api.platformAccessory(device.name, uuid);
+
+          accessory.context.device = device;
+          new LocationMotionSensorAccessory(this, accessory);
+
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        }
       }
     }
 
