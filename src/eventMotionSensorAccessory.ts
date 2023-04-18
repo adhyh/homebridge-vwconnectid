@@ -41,7 +41,7 @@ export class EventMotionSensorAccessory {
 
   async getMotionDetected(): Promise<CharacteristicValue> {
 
-    var state = false;
+    let state = false;
 
     if (this.accessory.context.device.event == 'carLocked') { state = (this.platform.vwConn.idData.access.accessStatus.value.doorLockStatus == 'locked') ? true : false}
     if (this.accessory.context.device.event == 'statusNotSafe') { state = (this.platform.vwConn.idData.access.accessStatus.value.overallStatus == 'safe') ? false : true}
