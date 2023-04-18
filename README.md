@@ -16,6 +16,10 @@ $ npm i homebridge-vwconnectid -g
 
 Homebridge plugins need to be installed globally, so the `-g` is mandatory.
 
+## Upgrading from 1.0.5 to 1.1.0
+
+The config has slightly changed. the `locationMotionSensors` block is not used anymore. Instead, the `destinations` block is used to configure a location as a destination for navigation (if `address` is specified) and/ or as a location aware motion trigger (if `notificationRadius` is specified). Migrating from 1.0.5 to 1.1.0, if you give the locations the same name, the old location motion sensor accessory will be reused. 
+
 ## Speed
 
 Communication between you and the backend and between the backend and the car is slow. Any changes take up to a minute or so to propagate to the car.
