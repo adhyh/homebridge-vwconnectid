@@ -64,7 +64,7 @@ export class LocationMotionSensorAccessory {
             this.accessory.context.device.lon,
             data.lat,
             data.lon,
-            this.accessory.context.device.radius);
+            (this.accessory.context.device.notificationRadius || this.accessory.context.device.radius) );
 
         return state;
     }
