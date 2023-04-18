@@ -118,3 +118,35 @@ export class ChargingAccessory {
     return true;
   }
 }
+
+export class RemainingRangeAccessory {
+  private service: Service;
+
+  constructor(
+    private readonly platform: WeConnectIDPlatform,
+    private readonly accessory: PlatformAccessory,
+  ) {
+
+    this.accessory.getService(this.platform.Service.AccessoryInformation)!
+      .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Volkswagen')
+      .setCharacteristic(this.platform.Characteristic.Model, this.platform.vwConn.vehicles.data.find(({ vin }) => vin === this.platform.config.weconnect.vin).model)
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, this.platform.config.weconnect.vin);
+
+    this.service = this.accessory.getService(this.platform.Service.LightSensor) || this.accessory.addService(this.platform.Service.LightSensor);
+
+    this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.displayName);
+
+    this.service.getCharacteristic(this.platform.Characteristic.CurrentAmbientLightLevel)
+      .onGet(this.getCurrentAmbientLightLevel.bind(this));
+
+    this.platform.idStatusEmitter.on('remainingRange', (range) => {
+      this.service.updateCharacteristic(this.platform.Characteristic.CurrentAmbientLightLevel, range);
+    });
+  }
+
+  async getCurrentAmbientLightLevel(): Promise<CharacteristicValue> {
+    const range = this.platform.vwConn.idData.charging.batteryStatus.value.cruisingRangeElectric_km;
+
+    return range;
+  }
+}
