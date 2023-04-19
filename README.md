@@ -45,7 +45,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
                 "logLevel": "NONE",
                 "chargingAccessory": "Charging",
                 "climatisationAccessory": "Climatisation",
-                "remainingRangeAccessory: "Remaining km",
+                "remainingRangeAccessory": "Remaining km",
                 "destinations": [
                     {
                         "name": "Home",
