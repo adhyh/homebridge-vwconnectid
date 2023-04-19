@@ -29,7 +29,7 @@ export class EventMotionSensorAccessory {
         
         this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, state);
         
-      } else if (typeof (state) == 'undefined') {
+      } else if( (typeof (state) == 'undefined') || (accessory.context.device.event == 'parked') ) {
         
         this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, true);
 
