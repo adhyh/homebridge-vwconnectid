@@ -25,15 +25,18 @@ export class EventMotionSensorAccessory {
 
     this.platform.idStatusEmitter.on(accessory.context.device.event, (state) => {
      
-      if (typeof (state) == 'undefined') {
+      if (typeof (state) == 'boolean') {
+        
+        this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, state);
+        
+      } else if (typeof (state) == 'undefined') {
+        
         this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, true);
 
         setTimeout(() => {
           this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, false);
         }, 10 * 1000);
 
-      } else {
-        this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, state);
       }
 
     });
