@@ -29,7 +29,7 @@ export class EventMotionSensorAccessory {
         
         this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, state);
         
-      } else if( (typeof (state) == 'undefined') || (accessory.context.device.event == 'parked') ) {
+      } else if (typeof (state) == 'undefined') {
         
         this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, true);
 
@@ -46,8 +46,10 @@ export class EventMotionSensorAccessory {
 
     let state = false;
 
-    if (this.accessory.context.device.event == 'carLocked') { state = (this.platform.vwConn.idData.access.accessStatus.value.doorLockStatus == 'locked') ? true : false}
-    if (this.accessory.context.device.event == 'statusNotSafe') { state = (this.platform.vwConn.idData.access.accessStatus.value.overallStatus == 'safe') ? false : true}
+    if (this.accessory.context.device.event == 'carLocked') { state = (this.platform.vwConn.idData.access.accessStatus.value.doorLockStatus == 'locked') ? true : false; }
+    if (this.accessory.context.device.event == 'parked') { state = this.platform.vwConn.idData.parking.data.carIsParked; }
+    if (this.accessory.context.device.event == 'notParked') { state = !this.platform.vwConn.idData.parking.data.carIsParked; }
+    if (this.accessory.context.device.event == 'statusNotSafe') { state = (this.platform.vwConn.idData.access.accessStatus.value.overallStatus == 'safe') ? false : true; }
     //if (this.accessory.context.device.event == 'noExternalPower') { state = (this.platform.vwConn.idData.charging.plugStatus.value.externalPower == 'ready') ? false : true}
     return state;
   }
