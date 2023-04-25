@@ -49,8 +49,8 @@ export class EventMotionSensorAccessory {
     if (this.accessory.context.device.event == 'carLocked') { state = (this.platform.vwConn.idData.access.accessStatus.value.doorLockStatus == 'locked') ? true : false; }
     if (this.accessory.context.device.event == 'parked') { state = this.platform.vwConn.idData.parking.data.carIsParked; }
     if (this.accessory.context.device.event == 'notParked') { state = !this.platform.vwConn.idData.parking.data.carIsParked; }
-    if (this.accessory.context.device.event == 'statusNotSafe') { state = (this.platform.vwConn.idData.access.accessStatus.value.overallStatus == 'safe') ? false : true; }
-    //if (this.accessory.context.device.event == 'noExternalPower') { state = (this.platform.vwConn.idData.charging.plugStatus.value.externalPower == 'ready') ? false : true}
+    if (this.accessory.context.device.event == 'statusNotSafe') { state = this.platform.vwConn.config.unSafe; }
+    if (this.accessory.context.device.event == 'noExternalPower') { state = this.platform.vwConn.config.noExternalPower; }
     return state;
   }
 }
