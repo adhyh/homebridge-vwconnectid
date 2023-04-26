@@ -21,7 +21,7 @@ export class LocationMotionSensorAccessory {
         this.service.getCharacteristic(this.platform.Characteristic.MotionDetected)
             .onGet(this.getMotionDetected.bind(this));
 
-        this.platform.idStatusEmitter.on('parked', (data) => {
+        this.platform.idStatusEmitter.on('positionUpdate', (data) => {
             if (this.parkedInRange(
                 this.accessory.context.device.lat,
                 this.accessory.context.device.lon,
@@ -32,7 +32,7 @@ export class LocationMotionSensorAccessory {
             }
         });
 
-        this.platform.idStatusEmitter.on('notParked', () => {
+        this.platform.idStatusEmitter.on('positionUnknown', () => {
             this.service.updateCharacteristic(this.platform.Characteristic.MotionDetected, false);
         });
 
