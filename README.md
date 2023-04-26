@@ -16,9 +16,9 @@ $ npm i homebridge-vwconnectid -g
 
 Homebridge plugins need to be installed globally, so the `-g` is mandatory.
 
-## Upgrading from 1.0.5 to 1.1.1
+## Upgrading from 1.0.5 to 1.1.x
 
-The config has slightly changed. the `locationMotionSensors` block is not used anymore. Instead, the `destinations` block is used to configure a location as a destination for navigation (if `address` is specified) and/ or as a location aware motion trigger (if `notificationRadius` is specified). Migrating from 1.0.5 to 1.1.1, if you give the locations the same name, the old location motion sensor accessory will be reused. 
+The config has slightly changed. the `locationMotionSensors` block is not used anymore. Instead, the `destinations` block is used to configure a location as a destination for navigation (if `address` is specified) and/ or as a location aware motion trigger (if `notificationRadius` is specified). Migrating from 1.0.5 to 1.1.x, if you give the locations the same name, the old location motion sensor accessory will be reused (you probably want that). 
 
 ## Speed
 
@@ -128,7 +128,6 @@ Events:
 * 'chargingStarted' - Charging started.
 * 'chargingStopped' - Charging stopped.
 * 'noExternalPower' - Plug is connected and external power does not become available (charging cannot be started).
-* 'currentSOC' - Actuel state of charge changed. Emits SOC as argument.
 * 'climatisationStopped' - Climatisation stopped.
 * 'climatisationStarted' - Climatisation started.
 * 'climatisationCoolingStarted' - Climatisation started cooling.
@@ -149,6 +148,10 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
+* 1.1.2: 
+* * Bugfix parked event
+* * Less verbose error messages when VW backend is unavailable
+* * Most event motion sensors keep their state as long as the state doesn't change. Only `chargePurposeReached`, all `-Started` and `-Stopped`, and `climatisationTemperatureUpdated` trigger, then switch off again after 10 seconds.
 * 1.1.1: Bugfix location motion sensor
 * 1.1.0: 
 * * Added switches to send a destination to your car's navigation system.
