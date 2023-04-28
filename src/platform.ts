@@ -6,6 +6,7 @@ import { SettingAccessory } from './settingsAccessory';
 import { LocationMotionSensorAccessory } from './locationMotionSensorAccessory';
 import { EventMotionSensorAccessory } from './eventMotionSensorAccessory';
 import { DestinationSwitchAccessory } from './destinationSwitchAccessory';
+import { RouteSwitchAccessory } from './routeSwitchAccessory';
 import * as vwapi from 'npm-vwconnectidapi';
 import { config } from 'process';
 
@@ -147,9 +148,7 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
           }
         }
-
       }
-
     } else if (typeof this.config.options.locationMotionSensors !== 'undefined') {
       this.log.error('Location aware functionality has changed. Please update your config.json. You\'re missing out on a cool new feature! See https://github.com/adhyh/homebridge-vwconnectid#upgrading-from-105-to-110 for details.');
       for (const device of this.config.options.locationMotionSensors) {
@@ -167,6 +166,28 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
           new LocationMotionSensorAccessory(this, accessory);
 
           this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        }
+      }
+    }
+
+    if (typeof this.config.options.routes !== 'undefined') {
+
+      for (const route of this.config.options.routes) {
+
+        // route switches
+        if (typeof route.name !== 'undefined') {
+          const uuid = this.api.hap.uuid.generate(route.name + '-route');
+          const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
+          if (existingAccessory) {
+            this.log.info('Restoring existing accessory from cache:', existingAccessory.displayName);
+            new RouteSwitchAccessory(this, existingAccessory);
+          } else {
+            this.log.info('Adding new accessory:', route.name);
+            const accessory = new this.api.platformAccessory(route.name, uuid);
+            accessory.context.route = route;
+            new RouteSwitchAccessory(this, accessory);
+            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+          }
         }
       }
     }
