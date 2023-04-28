@@ -72,6 +72,35 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
                         "notificationRadius": 200
                     }
                 ],
+                "routes": [
+                    {
+                        "name": "Home-Work",
+                        "stopovers": [
+                            {
+                                "name": "Home",
+                                "lat": 52.123456,
+                                "lon": 5.123456,
+                                "address": {
+                                    "country": "Nederland",
+                                    "street": "My street 4",
+                                    "zipCode": "1234 AA",
+                                    "city": "My town"
+                                }
+                            },
+                            {
+                                "name": "Work",
+                                "lat": 52.234567,
+                                "lon": 4.234567,
+                                "address": {
+                                    "country": "Nederland",
+                                    "street": "Cool street 75",
+                                    "zipCode": "2345 BB",
+                                    "city": "Your city"
+                                }
+                            }
+                        ]
+                    }
+                ],
                 "settingSwitches": [
                     {
                         "name": "Reduced AC",
@@ -117,6 +146,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
 * You can add locations to `destinations` block. 
 * * If a `notificationRadius` is specified a motion sensor will be created with `name` that triggers whenever the car is parked within `notificationRadius` distance around the location  (GPS `lat` and `lon`). Please respect the driver's privacy if using this option.
 * * If an `address` block is specified a switch will be created that sends the destination to your car's navigation system.
+* Add routes in the `routes` block. A route has multiple multiple stopovers. For each route a switch is created that sends the route to the navigation system. 
 * You can add even more motion sensors to `eventMotionSensors`. These create a motion sensor with `name` that triggers on a preset event. You can choose from the following list of events:
 
 Events:
@@ -148,6 +178,7 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
+* 1.1.3: Support for (complex) routes with multiple stopovers.
 * 1.1.2: 
 * * Bugfix parked event
 * * Less verbose error messages when VW backend is unavailable
