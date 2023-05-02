@@ -178,7 +178,9 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
-* 1.1.3: Support for (complex) routes with multiple stopovers.
+* 1.1.3: 
+* * Support for (complex) routes with multiple stopovers.
+* * Fix `noExternalPower` event.
 * 1.1.2: 
 * * Bugfix parked event
 * * Less verbose error messages when VW backend is unavailable
