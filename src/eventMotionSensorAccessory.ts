@@ -57,6 +57,7 @@ export class EventMotionSensorAccessory {
     if (this.accessory.context.device.event == 'notParked') { state = !this.platform.vwConn.idData.parking.data.carIsParked; }
     if (this.accessory.context.device.event == 'statusNotSafe') { state = this.platform.vwConn.config.unSafe; }
     if (this.accessory.context.device.event == 'noExternalPower') { state = this.platform.vwConn.config.noExternalPower; }
+    if (this.accessory.context.device.event == 'backendError') { state = this.platform.vwConn.config.backendError; }
     return state;
   }
 }
