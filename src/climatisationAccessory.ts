@@ -94,7 +94,7 @@ export class ClimatisationAccessory {
   }
 
   async getTargetTemperature(): Promise<CharacteristicValue> {
-    if (typeof(this.platform.vwConn.idData.climatisation?.climatisationSettings?.value?.targetTemperature_C) === 'undefined') return 0;
+    if (typeof(this.platform.vwConn.idData.climatisation?.climatisationSettings?.value?.targetTemperature_C) === 'undefined') return 10;
     const targetTemperature = this.platform.vwConn.idData.climatisation.climatisationSettings.value.targetTemperature_C;
 
     this.platform.log.debug('Get Characteristic TargetTemperature ->', targetTemperature);
