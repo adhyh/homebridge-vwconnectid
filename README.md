@@ -133,6 +133,7 @@ Events:
 * 'climatisationCoolingStarted' - Climatisation started cooling.
 * 'climatisationHeatingStarted' - Climatisation started heating.
 * 'climatisationTemperatureUpdated' - Target climatisation temperature changed.
+* 'backendError' - Backend connection error state. Motion detected = error.
 
 ## Charging accessory
 * Creates a switch for charging start and stop.
@@ -148,7 +149,10 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
-* 1.1.3: Bugfix error messages when other driver is using the car.
+* 1.1.3:
+* * Bugfix error messages when other driver is using the car.
+* * Log lost/ made connection with backend only once
+* * Added `backendError` motion sensor to indicate connection state with Volkswagen server. 
 * 1.1.2: 
 * * Bugfix parked event
 * * Less verbose error messages when VW backend is unavailable
