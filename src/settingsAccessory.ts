@@ -90,17 +90,17 @@ export class SettingAccessory {
 
     switch (this.accessory.context.device.setting) {
       case "reducedAC":
-        return this.platform.vwConn.idData.charging.chargingSettings.value.maxChargeCurrentAC === 'reduced';
+        return (typeof(this.platform.vwConn.idData.charging?.chargingSettings?.value?.maxChargeCurrentAC) !== 'undefined') ? this.platform.vwConn.idData.charging.chargingSettings.value.maxChargeCurrentAC === 'reduced' : false;
       case "autoUnlockPlug":
-        return this.platform.vwConn.idData.charging.chargingSettings.value.autoUnlockPlugWhenCharged === 'permanent';
+        return (typeof(this.platform.vwConn.idData.charging?.chargingSettings?.value?.autoUnlockPlugWhenCharged) !== 'undefined') ? this.platform.vwConn.idData.charging.chargingSettings.value.autoUnlockPlugWhenCharged === 'permanent' : false;
       case "climatizationAtUnlock":
-        return this.platform.vwConn.idData.climatisation.climatisationSettings.value.climatizationAtUnlock;
+        return (typeof(this.platform.vwConn.idData.climatisation?.climatisationSettings?.value?.climatizationAtUnlock) !== 'undefined') ? this.platform.vwConn.idData.climatisation.climatisationSettings.value.climatizationAtUnlock : false;
       case "climatisationWindowHeating":
-        return this.platform.vwConn.idData.climatisation.climatisationSettings.value.windowHeatingEnabled;
+        return (typeof(this.platform.vwConn.idData.climatisation?.climatisationSettings?.value?.windowHeatingEnabled) !== 'undefined') ? this.platform.vwConn.idData.climatisation.climatisationSettings.value.windowHeatingEnabled : false;
       case "climatisationFrontLeft":
-        return this.platform.vwConn.idData.climatisation.climatisationSettings.value.zoneFrontLeftEnabled;
+        return (typeof(this.platform.vwConn.idData.climatisation?.climatisationSettings?.value?.zoneFrontLeftEnabled) !== 'undefined') ? this.platform.vwConn.idData.climatisation.climatisationSettings.value.zoneFrontLeftEnabled : false;
       case "climatisationFrontRight":
-        return this.platform.vwConn.idData.climatisation.climatisationSettings.value.zoneFrontRightEnabled;
+        return (typeof(this.platform.vwConn.idData.climatisation?.climatisationSettings?.value?.zoneFrontRightEnabled) !== 'undefined') ? this.platform.vwConn.idData.climatisation.climatisationSettings.value.zoneFrontRightEnabled : false;
       default:
         return false;
     }
