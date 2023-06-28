@@ -102,12 +102,14 @@ export class ChargingAccessory {
   }
 
   async getOn(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.charging?.chargingStatus?.value?.chargingState) === 'undefined') return false;
     const isOn = this.platform.vwConn.idData.charging.chargingStatus.value.chargingState === 'charging';
 
     return isOn;
   }
 
   async getBatteryLevel(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.charging?.batteryStatus?.value?.currentSOC_pct) === 'undefined') return 80;
     const brightness = this.platform.vwConn.idData.charging.batteryStatus.value.currentSOC_pct;
 
     return brightness;
@@ -145,6 +147,7 @@ export class RemainingRangeAccessory {
   }
 
   async getCurrentAmbientLightLevel(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.charging?.batteryStatus?.value?.cruisingRangeElectric_km) === 'undefined') return 300;
     const range = this.platform.vwConn.idData.charging.batteryStatus.value.cruisingRangeElectric_km;
 
     return range;
