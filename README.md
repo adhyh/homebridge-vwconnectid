@@ -150,9 +150,10 @@ Events:
 
 ## Changelog
 * 1.1.3:
-* * Bugfix error messages when other driver is using the car.
+* * Bugfix error messages when other driver is using the car, and some other minor logging changes.
 * * Log lost/ made connection with backend only once
-* * Added `backendError` motion sensor to indicate connection state with Volkswagen server. 
+* * Added `backendError` motion sensor to indicate connection state with Volkswagen server.
+* * Fixed `NoExternalPower` event
 * 1.1.2: 
 * * Bugfix parked event
 * * Less verbose error messages when VW backend is unavailable
