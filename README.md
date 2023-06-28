@@ -148,6 +148,7 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
+* 1.1.3: Bugfix error messages when other driver is using the car.
 * 1.1.2: 
 * * Bugfix parked event
 * * Less verbose error messages when VW backend is unavailable
