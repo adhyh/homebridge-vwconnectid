@@ -68,6 +68,7 @@ export class ClimatisationAccessory {
   }
 
   async getCurrentHeatingCoolingState(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.climatisation?.climatisationStatus?.value?.climatisationState) === 'undefined') return 0;
     const state = this.platform.vwConn.idData.climatisation.climatisationStatus.value.climatisationState;
     let ret = 0;
 
@@ -93,6 +94,7 @@ export class ClimatisationAccessory {
   }
 
   async getTargetTemperature(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.climatisation?.climatisationSettings?.value?.targetTemperature_C) === 'undefined') return 0;
     const targetTemperature = this.platform.vwConn.idData.climatisation.climatisationSettings.value.targetTemperature_C;
 
     this.platform.log.debug('Get Characteristic TargetTemperature ->', targetTemperature);
