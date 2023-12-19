@@ -43,6 +43,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
             },
             "options": {
                 "logLevel": "NONE",
+                "apiPort": 1234,
                 "chargingAccessory": "Charging",
                 "climatisationAccessory": "Climatisation",
                 "remainingRangeAccessory": "Remaining km",
@@ -111,7 +112,8 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
 
 * The `name` will be the identifier that you can use, for example, in Siri commands;
 * Replace `weconnect` options with the correct values;
-* set `logLevel` to `NONE`, `DEBUG`, `INFO` or `ERROR`. Set to NONE if you think backend is too chatty. Defaults to ERROR. 
+* set `logLevel` to `NONE`, `DEBUG`, `INFO` or `ERROR`. Set to NONE if you think backend is too chatty. Defaults to ERROR.
+* set `apiPort` to a port number to expose the weconnect API at /status on the HB machine.
 * Set charging, remaining range, and climatisation accessory names. Remove these options to avoid creating the accessories alltogether.
 * Select setting switches to be exposed by Homekit. 
 * You can add locations to `destinations` block. 
@@ -149,6 +151,9 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
+* 1.1.4:
+* * Fix status update bug due to VW backend update
+* * Add RESTful api for various uses
 * 1.1.3:
 * * Bugfix error messages when other driver is using the car, and some other minor logging changes.
 * * Log lost/ made connection with backend only once
