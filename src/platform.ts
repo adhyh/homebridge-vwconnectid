@@ -34,6 +34,9 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
     this.idLogEmitter.on('WARN', (data) => { this.log.warn(data); });
 
     this.vwConn.setCredentials(this.config.weconnect.username, this.config.weconnect.password);
+    if(this.config.options.apiPort) {
+      this.vwConn.enableApi(this.config.options.apiPort);
+    }
 
     this.api.on('didFinishLaunching', () => {
       log.info('Executed didFinishLaunching callback');
