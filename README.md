@@ -28,11 +28,9 @@ Communication between you and the backend and between the backend and the car is
 
 First, you need a working Homebridge installation.
 
-Once you have that working, edit `~/.homebridge/config.json` and add a new accessory:
+Once you have that working, edit `~/.homebridge/config.json` and add the following code block to the "platforms" section:
 
 ```
-"accessories": [
-    ...
     {
             "name": "We Connect ID",
             "platform": "WeConnectID",
@@ -134,8 +132,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add a new acces
                     }
                 ]
             }
-        },
-]
+        }
 ```
 
 * The `name` will be the identifier that you can use, for example, in Siri commands;
