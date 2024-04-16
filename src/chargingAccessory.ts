@@ -1,6 +1,7 @@
 import { Service, PlatformAccessory, CharacteristicValue, Characteristic } from 'homebridge';
 import * as vwapi from 'npm-vwconnectidapi';
 import { WeConnectIDPlatform } from './platform';
+import { LocationMotionSensorAccessory } from './locationMotionSensorAccessory';
 
 export class ChargingAccessory {
   private service: Service;
@@ -9,6 +10,7 @@ export class ChargingAccessory {
   constructor(
     private readonly platform: WeConnectIDPlatform,
     private readonly accessory: PlatformAccessory,
+    private readonly solarAccessory: LocationMotionSensorAccessory
   ) {
 
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
@@ -56,6 +58,7 @@ export class ChargingAccessory {
     this.platform.idStatusEmitter.on('chargePurposeReached', () => {
       targetSOCreachedService.updateCharacteristic(this.platform.Characteristic.MotionDetected, true);
 
+    
       setInterval(() => {
         targetSOCreachedService.updateCharacteristic(this.platform.Characteristic.MotionDetected, false);
       }, 60 * 1000);
@@ -75,7 +78,24 @@ export class ChargingAccessory {
       chargePercentageService.updateCharacteristic(this.platform.Characteristic.On, true);
       chargePercentageService.updateCharacteristic(this.platform.Characteristic.Brightness, soc);
     });
+
+    this.solarAccessory = this.platform.accessories.find(accessory => accessory.context.device.solarControlled === true);
+
+    if (this.solarAccessory) {
+      setInterval(this.dynamicChargingLoop(solarAccessory), 60000);
+    }
+    
   }
+
+  async dynamicChargingLoop(solarAccessory: LocationMotionSensorAccessory) {
+    const motionDetected = await solarAccessory.getMotionDetected();
+    const isMotion = !!motionDetected;
+    this.platform.log.info('dynamicChargingLoop: ', isMotion)
+
+    if (isMotion){
+      
+    }
+}
 
   async setOn(value: CharacteristicValue) {
     if (value as boolean) {

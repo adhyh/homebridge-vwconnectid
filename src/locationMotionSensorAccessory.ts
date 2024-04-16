@@ -68,4 +68,9 @@ export class LocationMotionSensorAccessory {
 
         return state;
     }
+
+    // async checkMotion() {
+    //     const motionDetected = await this.getMotionDetected();
+    //     return !!motionDetected;
+    // }
 }
