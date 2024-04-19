@@ -9,7 +9,7 @@ export class SmartChargingAccessory {
     constructor(
         private readonly platform: WeConnectIDPlatform,
         private readonly accessory: PlatformAccessory,
-        private intervalId: number | null = null,
+        private intervalId: NodeJS.Timer | null = null,
     ) {
 
         this.accessory.getService(this.platform.Service.AccessoryInformation)!
@@ -57,55 +57,58 @@ export class SmartChargingAccessory {
         const minRedeliveryTreshold = -1 * this.accessory.context.device.minRedeliveryTreshold;
         const maxDeliveryTreshold = this.accessory.context.device.maxDeliveryTreshold;
 
-        //this.platform.log.info('range: ', range);
-        //this.platform.log.info('charging: ', this.platform.vwConn.idData.charging.chargingStatus.value.chargingState);
-
-        //chargeready?
-
         if (range < highTariffKmTreshold) {
             if (isReduced) {
+                this.platform.log.info('range below highTariffKmTreshold, setting max charge current');
                 this.platform.vwConn.setChargingSetting('chargeCurrent', 'maximum');
             }
             if (isReadyForCharging) {
+                this.platform.log.info('range below highTariffKmTreshold, start charging');
                 this.platform.vwConn.startCharging();
             }
         } else if (range < lowTariffKmTreshold) {
             if (!isReduced) {
+                this.platform.log.info('range below lowTariffKmTreshold, setting reduced charge current');
                 this.platform.vwConn.setChargingSetting('chargeCurrent', 'reduced');
             }
             if (isReadyForCharging) {
+                this.platform.log.info('range below lowTariffKmTreshold, start charging');
                 this.platform.vwConn.startCharging();
             }
         } else {
             const url = this.accessory.context.device.energyDataSource;
             this.fetchJSONData(url)
                 .then((data) => {
-                    this.platform.log.info('JSON Data minAvg: ', data.minAvg);
 
                     if (data.minAvg < minRedeliveryTreshold) {
 
                         if (isCharging && isReduced) {
+                            this.platform.log.info('JSON Data minAvg: ', data.minAvg);
+                            this.platform.log.info('redelivery < minRedeliveryTreshold, currently charging, so setting maximum charge current');
                             this.platform.vwConn.setChargingSetting('chargeCurrent', 'maximum');
-                            this.platform.log.info('set maximum');
                             return;
                         }
                         if (!isReduced) {
+                            this.platform.log.info('JSON Data minAvg: ', data.minAvg);
+                            this.platform.log.info('redelivery < minRedeliveryTreshold, currently maximum charge current, setting to reduced');
                             this.platform.vwConn.setChargingSetting('chargeCurrent', 'reduced');
-                            this.platform.log.info('set reduced');
                         }
                         if (isReadyForCharging) {
+                            this.platform.log.info('JSON Data minAvg: ', data.minAvg);
+                            this.platform.log.info('redelivery < minRedeliveryTreshold, start charging');
                             this.platform.vwConn.startCharging();
-                            this.platform.log.info('start charging');
                         }
 
                     } else if (data.minAvg > maxDeliveryTreshold && !isReduced && isCharging) {
+                        this.platform.log.info('JSON Data minAvg: ', data.minAvg);
+                        this.platform.log.info('redelivery > maxDeliveryTreshold, currently charging at max, so setting to reduced');
                         this.platform.vwConn.setChargingSetting('chargeCurrent', 'reduced');
-                        this.platform.log.info('set reduced');
                         return;
                     } else if (data.minAvg > maxDeliveryTreshold && isCharging) {
+                        this.platform.log.info('JSON Data minAvg: ', data.minAvg);
+                        this.platform.log.info('redelivery > maxDeliveryTreshold, currently charging, so stop charging');
                         this.platform.vwConn.stopCharging();
-                        this.platform.log.info('stop charging');
-                    }
+                     }
 
                 })
                 .catch((error) => {
@@ -130,7 +133,7 @@ export class SmartChargingAccessory {
             
         }
     
-        this.platform.log.info('Set Characteristic On ->', value);
+        this.platform.log.info('Set smart charging Characteristic On ->', value);
     }
 
     //   async getOn(): Promise<CharacteristicValue> {
