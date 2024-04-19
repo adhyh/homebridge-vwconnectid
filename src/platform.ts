@@ -9,6 +9,7 @@ import { DestinationSwitchAccessory } from './destinationSwitchAccessory';
 import { RouteSwitchAccessory } from './routeSwitchAccessory';
 import * as vwapi from 'npm-vwconnectidapi';
 import { config } from 'process';
+import { SmartChargingAccessory } from './smartChargingAccessory';
 
 export class WeConnectIDPlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
@@ -70,6 +71,21 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
         this.log.info('Adding new charging accessory:', this.config.options.chargingAccessory || 'Charging');
         const accessory = new this.api.platformAccessory(this.config.options.chargingAccessory || 'Charging', chargingUuid);
         new ChargingAccessory(this, accessory);
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
+    }
+
+    const smartChargingUuid = this.api.hap.uuid.generate('smartCharging');
+    const existingSmartChargingAccessory = this.accessories.find(accessory => accessory.UUID === smartChargingUuid);
+    if (existingSmartChargingAccessory) {
+      this.log.info('Restoring existing smart charging accessory from cache:', existingSmartChargingAccessory.displayName);
+      new SmartChargingAccessory(this, existingSmartChargingAccessory);
+    } else {
+      if (this.config.options.smartChargingAccessory !== undefined) {
+        this.log.info('Adding new smart charging accessory:', this.config.options.smartChargingAccessory || 'Smart Charging');
+        const accessory = new this.api.platformAccessory(this.config.options.smartChargingAccessory.name || 'Smart Charging', smartChargingUuid);
+        accessory.context.device = this.config.options.smartChargingAccessory;
+        new SmartChargingAccessory(this, accessory);
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
     }
