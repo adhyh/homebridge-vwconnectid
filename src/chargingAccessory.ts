@@ -1,7 +1,6 @@
 import { Service, PlatformAccessory, CharacteristicValue, Characteristic } from 'homebridge';
 import * as vwapi from 'npm-vwconnectidapi';
 import { WeConnectIDPlatform } from './platform';
-import { LocationMotionSensorAccessory } from './locationMotionSensorAccessory';
 
 export class ChargingAccessory {
   private service: Service;
@@ -10,7 +9,6 @@ export class ChargingAccessory {
   constructor(
     private readonly platform: WeConnectIDPlatform,
     private readonly accessory: PlatformAccessory,
-    private readonly solarAccessory: LocationMotionSensorAccessory
   ) {
 
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
@@ -58,7 +56,6 @@ export class ChargingAccessory {
     this.platform.idStatusEmitter.on('chargePurposeReached', () => {
       targetSOCreachedService.updateCharacteristic(this.platform.Characteristic.MotionDetected, true);
 
-    
       setInterval(() => {
         targetSOCreachedService.updateCharacteristic(this.platform.Characteristic.MotionDetected, false);
       }, 60 * 1000);
@@ -78,24 +75,7 @@ export class ChargingAccessory {
       chargePercentageService.updateCharacteristic(this.platform.Characteristic.On, true);
       chargePercentageService.updateCharacteristic(this.platform.Characteristic.Brightness, soc);
     });
-
-    this.solarAccessory = this.platform.accessories.find(accessory => accessory.context.device.solarControlled === true);
-
-    if (this.solarAccessory) {
-      setInterval(this.dynamicChargingLoop(solarAccessory), 60000);
-    }
-    
   }
-
-  async dynamicChargingLoop(solarAccessory: LocationMotionSensorAccessory) {
-    const motionDetected = await solarAccessory.getMotionDetected();
-    const isMotion = !!motionDetected;
-    this.platform.log.info('dynamicChargingLoop: ', isMotion)
-
-    if (isMotion){
-      
-    }
-}
 
   async setOn(value: CharacteristicValue) {
     if (value as boolean) {
@@ -122,12 +102,14 @@ export class ChargingAccessory {
   }
 
   async getOn(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.charging?.chargingStatus?.value?.chargingState) === 'undefined') return false;
     const isOn = this.platform.vwConn.idData.charging.chargingStatus.value.chargingState === 'charging';
 
     return isOn;
   }
 
   async getBatteryLevel(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.charging?.batteryStatus?.value?.currentSOC_pct) === 'undefined') return 80;
     const brightness = this.platform.vwConn.idData.charging.batteryStatus.value.currentSOC_pct;
 
     return brightness;
@@ -165,6 +147,7 @@ export class RemainingRangeAccessory {
   }
 
   async getCurrentAmbientLightLevel(): Promise<CharacteristicValue> {
+    if (typeof(this.platform.vwConn.idData.charging?.batteryStatus?.value?.cruisingRangeElectric_km) === 'undefined') return 300;
     const range = this.platform.vwConn.idData.charging.batteryStatus.value.cruisingRangeElectric_km;
 
     return range;
