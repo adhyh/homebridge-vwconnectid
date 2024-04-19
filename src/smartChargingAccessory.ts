@@ -25,16 +25,6 @@ export class SmartChargingAccessory {
         this.service.getCharacteristic(this.platform.Characteristic.On)
           .onSet(this.setOn.bind(this));
         //.onGet(this.getOn.bind(this));
-
-    // this.platform.idStatusEmitter.on('chargePurposeReached', () => {
-    //   targetSOCreachedService.updateCharacteristic(this.platform.Characteristic.MotionDetected, true);
-
-    //   setInterval(() => {
-    //     targetSOCreachedService.updateCharacteristic(this.platform.Characteristic.MotionDetected, false);
-    //   }, 60 * 1000);
-    // });
-
-
   }
 
   async fetchJSONData(url: string): Promise<any> {
