@@ -57,18 +57,17 @@ export class SmartChargingAccessory {
         this.platform.log.info('range below highTariffKmTreshold, start charging');
         this.platform.vwConn.startCharging();
       }
-    } else if (range < lowTariffKmTreshold) {
-      if (!isReduced) {
-        this.platform.log.info('range below lowTariffKmTreshold, setting reduced charge current');
-        this.platform.vwConn.setChargingSetting('chargeCurrent', 'reduced');
-      }
     } else {
       const url = this.accessory.context.device.energyDataSource;
       this.fetchJSONData(url)
         .then((data) => {
 
           if (range < lowTariffKmTreshold && data.lowTariff) {
-            
+            if (!isReduced) {
+              this.platform.log.info('range below lowTariffKmTreshold, setting reduced charge current');
+              this.platform.vwConn.setChargingSetting('chargeCurrent', 'reduced');
+            }
+                
             if (isReadyForCharging) {
               this.platform.log.info('range below lowTariffKmTreshold and low tariff, start charging');
               this.platform.vwConn.startCharging();
