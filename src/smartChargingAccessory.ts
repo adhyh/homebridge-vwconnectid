@@ -24,7 +24,7 @@ export class SmartChargingAccessory {
 
         this.service.getCharacteristic(this.platform.Characteristic.On)
           .onSet(this.setOn.bind(this));
-        //.onGet(this.getOn.bind(this));
+          .onGet(this.getOn.bind(this));
   }
 
   async fetchJSONData(url: string): Promise<any> {
@@ -128,9 +128,8 @@ export class SmartChargingAccessory {
     this.platform.log.info('Set smart charging Characteristic On ->', value);
   }
 
-  //   async getOn(): Promise<CharacteristicValue> {
-  //     const isOn = this.platform.vwConn.idData.charging.chargingStatus.value.chargingState === 'charging';
-
-  //     return isOn;
-  //   }
+  async getOn(): Promise<CharacteristicValue> {
+    
+    return (this.intervalId != null);
+  }
 }
