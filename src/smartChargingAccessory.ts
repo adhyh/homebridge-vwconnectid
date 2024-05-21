@@ -23,7 +23,7 @@ export class SmartChargingAccessory {
         this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.displayName);
 
         this.service.getCharacteristic(this.platform.Characteristic.On)
-          .onSet(this.setOn.bind(this));
+          .onSet(this.setOn.bind(this))
           .onGet(this.getOn.bind(this));
   }
 
