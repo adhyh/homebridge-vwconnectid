@@ -63,9 +63,9 @@ export class SmartChargingAccessory {
         .then((data) => {
 
           if (range < lowTariffKmTreshold && data.lowTariff) {
-            if (!isReduced) {
-              this.platform.log.info('range below lowTariffKmTreshold, setting reduced charge current');
-              this.platform.vwConn.setChargingSetting('chargeCurrent', 'reduced');
+            if (isReduced) {
+              this.platform.log.info('range below lowTariffKmTreshold, setting maximum charge current');
+              this.platform.vwConn.setChargingSetting('chargeCurrent', 'maximum');
             }
                 
             if (isReadyForCharging) {
