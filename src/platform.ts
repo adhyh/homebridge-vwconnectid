@@ -79,10 +79,8 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
     const existingSmartChargingAccessory = this.accessories.find(accessory => accessory.UUID === smartChargingUuid);
     if (existingSmartChargingAccessory) {
       this.log.info('Restoring existing smart charging accessory from cache:', existingSmartChargingAccessory.displayName);
-      if (this.config.options.smartChargingAccessory !== undefined && existingSmartChargingAccessory.context.device !== this.config.options.smartChargingAccessory) {
+      if (this.config.options.smartChargingAccessory !== undefined && existingSmartChargingAccessory.context.device != this.config.options.smartChargingAccessory) {
         this.log.info('Updating existing smart charging accessory:', existingSmartChargingAccessory.displayName);
-        console.log(JSON.stringify(this.config.options.smartChargingAccessory, null, 2));
-        console.log(JSON.stringify(existingSmartChargingAccessory.context.device, null, 2));
         existingSmartChargingAccessory.context.device = this.config.options.smartChargingAccessory;
       }
       new SmartChargingAccessory(this, existingSmartChargingAccessory);
