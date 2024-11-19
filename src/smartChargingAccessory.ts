@@ -43,6 +43,8 @@ export class SmartChargingAccessory {
 
         try {
             const range = this.platform.vwConn.idData?.charging?.batteryStatus?.value?.cruisingRangeElectric_km;
+            const targetSOC = this.platform.vwConn.idData?.charging?.chargingSettings?.value?.targetSOC_pct;
+            const currentSOC = this.platform.vwConn.idData?.charging?.batteryStatus?.value?.currentSOC_pct;
             const isCharging = this.platform.vwConn.idData?.charging?.chargingStatus?.value?.chargingState === 'charging';
             const isReadyForCharging = this.platform.vwConn.idData?.charging?.chargingStatus?.value?.chargingState === 'readyForCharging';
             const isReduced = this.platform.vwConn.idData?.charging?.chargingSettings?.value?.maxChargeCurrentAC === 'reduced';
@@ -50,6 +52,9 @@ export class SmartChargingAccessory {
             const lowTariffKmTreshold = this.accessory?.context?.device?.lowTariffKmTreshold;
             const minRedeliveryTreshold = -1 * this.accessory?.context?.device?.minRedeliveryTreshold;
             const maxDeliveryTreshold = this.accessory?.context?.device?.maxDeliveryTreshold;
+            const currentMonth = new Date().getMonth() + 1; 
+            const targetSolarRange = lowTariffKmTreshold + (range / currentSOC * targetSOC - lowTariffKmTreshold) * getMonthlyFraction(currentMonth);
+            console.log (targetSolarRange);
 
             if (range < highTariffKmTreshold) {
                 if (isReduced) {
@@ -65,14 +70,14 @@ export class SmartChargingAccessory {
                 this.fetchJSONData(url)
                     .then((data) => {
 
-                        if (range < lowTariffKmTreshold && data.lowTariff) {
+                        if (range < targetSolarRange && data.lowTariff) {
                             if (isReduced) {
-                                this.platform.log.info('range below lowTariffKmTreshold, setting maximum charge current');
+                                this.platform.log.info('range below targetSolarRange, setting maximum charge current');
                                 this.platform.vwConn.setChargingSetting('chargeCurrent', 'maximum');
                             }
 
                             if (isReadyForCharging) {
-                                this.platform.log.info('range below lowTariffKmTreshold and low tariff, start charging');
+                                this.platform.log.info('range below targetSolarRange and low tariff, start charging');
                                 this.platform.vwConn.startCharging();
                             }
                         } else if (data.minAvg < minRedeliveryTreshold) {
@@ -139,4 +144,15 @@ export class SmartChargingAccessory {
 
         return (this.intervalId != null);
     }
+
+    function getMonthlyFraction(currentMonth: number): number {
+    if (currentMonth < 1 || currentMonth > 12) {
+        throw new Error("Invalid month. Month should be between 1 and 12.");
+    }
+
+    // Calculate the cosine value
+    const radians = (2 * Math.PI / 12) * (currentMonth - 6);
+    return Math.cos(radians);
+    }
+    
 }
