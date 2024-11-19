@@ -54,8 +54,6 @@ export class SmartChargingAccessory {
             const maxDeliveryTreshold = this.accessory?.context?.device?.maxDeliveryTreshold;
             const currentMonth = new Date().getMonth() + 1; 
             const targetSolarRange = lowTariffKmTreshold + (range / currentSOC * targetSOC - lowTariffKmTreshold) * this.getMonthlyFraction(currentMonth);
-            console.log (targetSolarRange);
-            console.log (this.getMonthlyFraction(currentMonth));
 
             if (range < highTariffKmTreshold) {
                 if (isReduced) {
@@ -152,7 +150,7 @@ export class SmartChargingAccessory {
         }
 
         // Calculate the cosine value
-        const radians = (2 * Math.PI / 12) * (currentMonth);
+        const radians = (2 * Math.PI / 12) * (currentMonth - 6);
         return (1 + Math.cos(radians)) / 2;
     }
     
