@@ -55,6 +55,7 @@ export class SmartChargingAccessory {
             const currentMonth = new Date().getMonth() + 1; 
             const targetSolarRange = lowTariffKmTreshold + (range / currentSOC * targetSOC - lowTariffKmTreshold) * this.getMonthlyFraction(currentMonth);
             console.log (targetSolarRange);
+            console.log (this.getMonthlyFraction(currentMonth));
 
             if (range < highTariffKmTreshold) {
                 if (isReduced) {
