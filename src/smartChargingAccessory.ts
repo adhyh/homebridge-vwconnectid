@@ -145,14 +145,14 @@ export class SmartChargingAccessory {
         return (this.intervalId != null);
     }
 
-    function getMonthlyFraction(currentMonth: number): number {
-    if (currentMonth < 1 || currentMonth > 12) {
-        throw new Error("Invalid month. Month should be between 1 and 12.");
-    }
+    private getMonthlyFraction(currentMonth: number): number {
+        if (currentMonth < 1 || currentMonth > 12) {
+            throw new Error("Invalid month. Month should be between 1 and 12.");
+        }
 
-    // Calculate the cosine value
-    const radians = (2 * Math.PI / 12) * (currentMonth - 6);
-    return Math.cos(radians);
+        // Calculate the cosine value
+        const radians = (2 * Math.PI / 12) * (currentMonth - 6);
+        return Math.cos(radians);
     }
     
 }
