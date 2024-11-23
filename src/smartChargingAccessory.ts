@@ -109,6 +109,7 @@ export class SmartChargingAccessory {
                             this.platform.vwConn.stopCharging();
                         } else {
                             this.platform.log.info('smartChargingLoop no match');
+                        }
 
                     })
                     .catch((error) => {
