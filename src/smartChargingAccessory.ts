@@ -115,7 +115,7 @@ export class SmartChargingAccessory {
                     });
             }
         } catch (error) {
-            console.error("Error in smartChargingLoop:", error);
+            this.platform.log.error('Error in smartChargingLoop: ', error);
             // Handle the error (e.g., logging, fallback values, etc.)
         }
     }
