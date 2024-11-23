@@ -69,6 +69,9 @@ export class SmartChargingAccessory {
                 this.fetchJSONData(url)
                     .then((data) => {
 
+                        console.log(range);
+                        console.log(targetSolarRange);
+                        console.log(data.lowTariff);
                         if (range < targetSolarRange && data.lowTariff) {
                             if (isReduced) {
                                 this.platform.log.info('range below targetSolarRange, setting maximum charge current');
