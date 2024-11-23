@@ -153,12 +153,7 @@ export class SmartChargingAccessory {
         }
 
         // Calculate the cosine value
-        const radians = (2 * Math.PI / 12) * (currentMonth - 6);
-        
-        console.log(currentMonth);
-        console.log(radians);
-        console.log((Math.cos(radians)) / 2);
-    
+        const radians = (2 * Math.PI / 12) * (currentMonth - 12);
         return (1 + Math.cos(radians)) / 2;
     }
     
