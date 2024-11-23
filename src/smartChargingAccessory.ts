@@ -39,8 +39,6 @@ export class SmartChargingAccessory {
 
     async smartChargingLoop() {
 
-
-
         try {
             const range = this.platform.vwConn.idData?.charging?.batteryStatus?.value?.cruisingRangeElectric_km;
             const targetSOC = this.platform.vwConn.idData?.charging?.chargingSettings?.value?.targetSOC_pct;
@@ -69,7 +67,6 @@ export class SmartChargingAccessory {
                 this.fetchJSONData(url)
                     .then((data) => {
 
-                        console.log(targetSolarRange);
                         if (range < targetSolarRange && data.lowTariff) {
                             if (isReduced) {
                                 this.platform.log.info('range below targetSolarRange, setting maximum charge current');
