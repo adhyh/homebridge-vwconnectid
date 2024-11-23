@@ -157,7 +157,7 @@ export class SmartChargingAccessory {
         
         console.log(currentMonth);
         console.log(radians);
-        console.log(Math.cos(radians)) / 2);
+        console.log((Math.cos(radians)) / 2);
     
         return (1 + Math.cos(radians)) / 2;
     }
