@@ -53,7 +53,7 @@ export class SmartChargingAccessory {
             const minRedeliveryTreshold = -1 * this.accessory?.context?.device?.minRedeliveryTreshold;
             const maxDeliveryTreshold = this.accessory?.context?.device?.maxDeliveryTreshold;
             const currentMonth = new Date().getMonth() + 1; 
-            const targetSolarRange = lowTariffKmTreshold + (range / currentSOC * targetSOC - lowTariffKmTreshold) * this.getMonthlyFraction(currentMonth);
+            const targetSolarRange = lowTariffKmTreshold + ((range / currentSOC * targetSOC - lowTariffKmTreshold) * this.getMonthlyFraction(currentMonth));
 
             if (range < highTariffKmTreshold) {
                 if (isReduced) {
