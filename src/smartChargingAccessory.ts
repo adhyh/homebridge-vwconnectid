@@ -76,6 +76,8 @@ export class SmartChargingAccessory {
                             if (isReadyForCharging) {
                                 this.platform.log.info('range below targetSolarRange and low tariff, start charging');
                                 this.platform.vwConn.startCharging();
+                            } else if (isCharging) {
+                                this.platform.log.info(`Smart charging: ${range} km to ${targetSolarRange} km`);
                             }
                         } else if (data.minAvg < minRedeliveryTreshold) {
 
