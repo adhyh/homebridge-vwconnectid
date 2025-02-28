@@ -51,7 +51,8 @@ export class SmartChargingAccessory {
             const minRedeliveryTreshold = -1 * this.accessory?.context?.device?.minRedeliveryTreshold;
             const maxDeliveryTreshold = this.accessory?.context?.device?.maxDeliveryTreshold;
             const currentMonth = new Date().getMonth() + 1; 
-            const targetSolarRange = lowTariffKmTreshold + ((range / currentSOC * 80 - lowTariffKmTreshold) * this.getMonthlyFraction(currentMonth));
+            const lowTariffKmTresholdSOC = currentSOC / range * lowTariffKmThreshold;
+            const targetSolarSOC = lowTariffKmTresholdSOC + (80 - lowTariffKmTresholdSOC) * this.getMonthlyFraction(currentMonth));
 
             if (range < highTariffKmTreshold) {
                 if (isReduced) {
@@ -67,17 +68,17 @@ export class SmartChargingAccessory {
                 this.fetchJSONData(url)
                     .then((data) => {
 
-                        if (range < targetSolarRange && data.lowTariff) {
+                        if (currentSOC < targetSolarSOC && data.lowTariff) {
                             if (isReduced) {
-                                this.platform.log.info('range below targetSolarRange, setting maximum charge current');
+                                this.platform.log.info('SOC below targetSolarSOC, setting maximum charge current');
                                 this.platform.vwConn.setChargingSetting('chargeCurrent', 'maximum');
                             }
 
                             if (isReadyForCharging) {
-                                this.platform.log.info('range below targetSolarRange and low tariff, start charging');
+                                this.platform.log.info('SOC below targetSolarSOC and low tariff, start charging');
                                 this.platform.vwConn.startCharging();
                             } else if (isCharging) {
-                                this.platform.log.info(`Smart charging: ${range} km to ${targetSolarRange} km`);
+                                this.platform.log.info(`Smart charging: ${currentSOC}% to ${targetSolarSOC}%`);
                             }
                         } else if (data.minAvg < minRedeliveryTreshold) {
 
