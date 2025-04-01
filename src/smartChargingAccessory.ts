@@ -108,8 +108,6 @@ export class SmartChargingAccessory {
                             this.platform.log.info('JSON Data minAvg: ', data.minAvg);
                             this.platform.log.info('minute average power > maxDeliveryTreshold, currently charging, so stop charging');
                             this.platform.vwConn.stopCharging();
-                        } else {
-                            this.platform.log.info('smartChargingLoop no match');
                         }
 
                     })
