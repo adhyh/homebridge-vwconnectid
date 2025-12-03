@@ -41,6 +41,10 @@ export class WeConnectIDPlatform implements DynamicPlatformPlugin {
       this.vwConn.enableApi(this.config.options.apiPort);
     }
 
+    if(this.config.options.databaseIp) {
+      this.vwConn.setDatabase(this.config.options.databaseIp);
+    }
+
     this.api.on('didFinishLaunching', () => {
       log.info('Executed didFinishLaunching callback');
 
