@@ -172,7 +172,8 @@ Events:
 
 ## Changelog
 * 1.1.5: 
-* * Update npm-vwconnectidapi dependency
+* * Update npm-vwconnectidapi dependency. VW backend overhauled with new login logic. Plugin can't refresh and needs to re-login every hour. 
+* * Added setDatabase("<ip>"); function to plugin (and npm-vwconnectidapi). Use for logging legs and charging stops to mysql db. Look in npm-vwcopnnectidapi source for how to use.
 * 1.1.3: 
 * * Support for (complex) routes with multiple stopovers.
 * * Fix `noExternalPower` event.
