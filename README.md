@@ -12,6 +12,10 @@ $ npm i homebridge-vwconnectid -g
 
 Homebridge plugins need to be installed globally, so the `-g` is mandatory.
 
+## Update dec-25
+
+If you have trouble logging in check if any consent pages were not automatically accepted. I wasn't able to to test this thoroughly and you may need to open the consent page (url logged) manually. Edge seems to work, Firefox doesn't.
+
 ## Upgrading from 1.0.5 to 1.1.x
 
 The config has slightly changed. the `locationMotionSensors` block is not used anymore. Instead, the `destinations` block is used to configure a location as a destination for navigation (if `address` is specified) and/ or as a location aware motion trigger (if `notificationRadius` is specified). Migrating from 1.0.5 to 1.1.x, if you give the locations the same name, the old location motion sensor accessory will be reused (you probably want that). 
