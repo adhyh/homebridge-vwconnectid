@@ -4,10 +4,6 @@ This is a plugin for Homebridge to allow controlling your Volkswagen ID series (
 
 Uses the [`npm-vwconnectidapi`](https://github.com/adhyh/npm-vwconnectidapi) module under the hood to communicate with the Volkwagen backend.
 
-## 405 error Login Failed
-
-If you see 405 error Login Failed in your homebridge log, you can fix it by going to http://myvolkswagen.de, login, and accept the (new) terms and conditions. You may need to login multiple times and accept T&C each time.
-
 ## Installation
 
 ```
@@ -137,7 +133,7 @@ Once you have that working, edit `~/.homebridge/config.json` and add the followi
 
 * The `name` will be the identifier that you can use, for example, in Siri commands;
 * Replace `weconnect` options with the correct values;
-* set `logLevel` to `NONE`, `DEBUG`, `INFO` or `ERROR`. Set to NONE if you think backend is too chatty. Defaults to ERROR. 
+* set `logLevel` to `NONE`, `DEBUG`, `INFO` or `ERROR`. Set to NONE if you think backend is too chatty. Defaults to ERROR.
 * Set charging, remaining range, and climatisation accessory names. Remove these options to avoid creating the accessories alltogether.
 * Select setting switches to be exposed by Homekit. 
 * You can add locations to `destinations` block. 
@@ -175,6 +171,9 @@ Events:
 * Set climatisation on and off. Setting the temperature doesn't automatically trigger on/ off state.
 
 ## Changelog
+* 1.1.5: 
+* * Update npm-vwconnectidapi dependency. VW backend overhauled with new login logic. Plugin can't refresh and needs to re-login every hour. 
+* * Added setDatabase("<ip>"); function to plugin (and npm-vwconnectidapi). Use for logging legs and charging stops to mysql db. Look in npm-vwcopnnectidapi source for how to use.
 * 1.1.3: 
 * * Support for (complex) routes with multiple stopovers.
 * * Fix `noExternalPower` event.
