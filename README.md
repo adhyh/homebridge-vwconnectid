@@ -1,5 +1,7 @@
 # Homebridge Volkswagen ID.x plugin
 
+# Discontinued: Volkswagen has disabled authentication for non-official apps. This plugin no longer works until someone fixes the auth flow.
+
 This is a plugin for Homebridge to allow controlling your Volkswagen ID series (ID.3, ID.4, ID.5) car through iOS' HomeKit.
 
 Uses the [`npm-vwconnectidapi`](https://github.com/adhyh/npm-vwconnectidapi) module under the hood to communicate with the Volkwagen backend.
